@@ -5,7 +5,7 @@ from app.services.code_generator import generate_room_code
 
 router = APIRouter()
 
-@router.post("/rooms")
+@router.post("/room")
 def create_room():
     """Create a new room and generate a unique room code."""
     room_code = generate_room_code()
