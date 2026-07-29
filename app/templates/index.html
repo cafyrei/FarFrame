@@ -13,9 +13,20 @@
     <button id="create-room-button">Create Room</button>
     <button id="join-room-button">Join Room</button>
 
-    <!-- Display Room ID Modal -->
 
-    <div id="room-modal" class="modal">
+    <!-- Join Room Modal -->
+    <div id="join-room-modal" class="modal">
+        <div class="modal-content">
+            <h2>Join Room</h2>
+            <p>Enter Room Code:</p>
+            <input type="text" id="room-code-input" placeholder="Room Code">
+            <button id="submit-room-code-button">Submit</button>
+        </div>
+    </div>
+
+
+    <!-- Display Room ID Modal -->
+    <div id="create-room-modal" class="modal">
         <div class="modal-content">
             <h2>Room Created</h2>
             <p>Room Code: 
