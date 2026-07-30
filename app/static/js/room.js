@@ -13,9 +13,7 @@ const join_room_modal = document.getElementById("join-room-modal");
 
 // Buttons inside modals
 const close_modal_button = document.getElementById("close-modal-button");
-const submit_room_code_button = document.getElementById(
-  "submit-room-code-button",
-);
+const submit_room_code_button = document.getElementById("submit-room-code-button");
 
 const room_code_input = document.getElementById("room-code-input");
 
@@ -35,15 +33,13 @@ join_room_button.addEventListener("click", async () => {
 });
 
 submit_room_code_button.addEventListener("click", async () => {
-  submit_room_code_button.addEventListener("click", async () => {
-    try {
-      const room = await join_room(room_code_input.value);
+  try {
+    const room = await join_room(room_code_input.value);
 
-      console.log(room);
+    console.log(room);
 
-      join_room_modal.style.display = "none";
-    } catch (error) {
-      console.error("Error joining room:", error);
-    }
-  });
+    join_room_modal.style.display = "none";
+  } catch (error) {
+    console.error("Error joining room:", error);
+  }
 });

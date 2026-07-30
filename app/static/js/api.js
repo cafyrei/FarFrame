@@ -7,10 +7,13 @@ export async function create_room() {
     });
 
     if(!response.ok) {
+        console.log("Room created: Not OK");
         throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     const data = await response.json();
+
+    console.log("Room created:", data);
     return data;
 }
 
