@@ -29,7 +29,9 @@ export async function join_room(room_code) {
     if(!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
-
+    
     const data = await response.json();
+
+    console.log("Joined room:", data);
     return data;
 }   

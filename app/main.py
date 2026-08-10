@@ -1,7 +1,8 @@
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from app.routes.room import router
+from app.routes.room import router as room_router
+from app.routes.pages import router as pages_router
 
 app = FastAPI(
     title="Far Frame Booth API",
@@ -14,6 +15,7 @@ app = FastAPI(
 )
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
 templates = Jinja2Templates(directory="app/templates")
 
 @app.get("/")
@@ -24,4 +26,8 @@ def read_root(request: Request):
     context={}
 )
 
-app.include_router(router)
+
+# Include the routers for /routes folder
+
+app.include_router(room_router)
+app.include_router(pages_router)

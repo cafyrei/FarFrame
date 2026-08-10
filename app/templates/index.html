@@ -13,17 +13,18 @@
     <button id="create-room-button">Create Room</button>
     <button id="join-room-button">Join Room</button>
 
-
     <!-- Join Room Modal -->
     <div id="join-room-modal" class="modal">
         <div class="modal-content">
             <h2>Join Room</h2>
             <p>Enter Room Code:</p>
+            <label for="room-code-input" id="errMsg"></label>
             <input type="text" id="room-code-input" placeholder="Room Code">
             <button id="submit-room-code-button">Submit</button>
+            
+            <button id="close-modal-button-join">Close</button>  
         </div>
     </div>
-
 
     <!-- Display Room ID Modal -->
     <div id="create-room-modal" class="modal">
@@ -33,11 +34,26 @@
                 <span id="room-id"></span>
             </p>
 
-            <button id="close-modal-button">Close</button>  
+
+            <button id="copy-room-id-button">Copy Room Code</button>
+            <button id="close-modal-button-create">Close</button>  
+            
+            <div id="start-session"> 
+                <button id="start-session-button">Start Session</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="failmodal" class="modal">
+        <div class="modal-content">
+            <h2>Failed to Join Room</h2>
+            <p>Invalid Room Code. Please try again.</p>
+            <button id="close-fail-modal-button">Close</button>
         </div>
     </div>
 
 
-    <script type="module" src="/static/js/room.js"></script>
+    <script type="module" src="/static/js/room/room-main.js"></script>
+    <script type="module" src="/static/js/room/room-modal.js"></script>
 </body>
 </html>
