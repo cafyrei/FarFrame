@@ -7,7 +7,7 @@ from fastapi import HTTPException
 
 import traceback # Debugging: Import traceback for error handling
 
-from app.models.room import Room
+from app.models.roomModel import Room
 from app.services.code_generator import generate_room_code
 from app.database import SessionLocal
 
@@ -68,7 +68,22 @@ class RoomManager:
             }
 
         finally:
-            db.close()        
+            db.close()       
+            
+            
+    def room_exists(self, room_code):
+        db = SessionLocal()
+        try:
+            room = (
+                db.query(Room)
+                .filter(Room.room_code == room_code)
+                .first()
+            )
+            return room is not None
+        
+        finally:
+            db.close()
+        
          
 
     def leave_room(self, room_id, user):

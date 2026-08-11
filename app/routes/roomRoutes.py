@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException
 
 import traceback # Debug Module
 
-from app.services.room_manager import RoomManager
+from app.services.roomManager import RoomManager
 
 router = APIRouter()
 
