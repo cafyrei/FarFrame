@@ -1,10 +1,8 @@
 from app.schemas.room import JoinRoomRequest
-
 from fastapi import APIRouter, HTTPException
+from app.services.roomManager import RoomManager
 
 import traceback # Debug Module
-
-from app.services.roomManager import RoomManager
 
 router = APIRouter()
 

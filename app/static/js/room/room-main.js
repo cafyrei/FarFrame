@@ -1,62 +1,156 @@
 import { create_room, join_room } from "./room-api.js";
-import { setRoomCode } from "./room-state.js";
 import { showModal, hideModal } from "../utils/modal-utils.js";
 
-//
+
+// ==================================================
+// State
+// ==================================================
+
+let currentRoomCode = null;
+
+
+// ==================================================
+// HTML Elements
+// ==================================================
+
 const room_id = document.getElementById("room-id");
 const room_code_input = document.getElementById("room-code-input");
-
-// Event listeners for buttons
-const create_room_button = document.getElementById("create-room-button");
-const join_room_button = document.getElementById("join-room-button");
-const submit_room_code_button = document.getElementById(
-  "submit-room-code-button",
-);
-const fail_modal_button = document.getElementById("close-fail-modal-button");
-
 const errorMsg = document.getElementById("errMsg");
 
+
+// ==================================================
+// Buttons
+// ==================================================
+
+const create_room_button =
+    document.getElementById("create-room-button");
+
+const join_room_button =
+    document.getElementById("join-room-button");
+
+const submit_room_code_button =
+    document.getElementById("submit-room-code-button");
+
+const copy_room_id_button =
+    document.getElementById("copy-room-id-button");
+
+const close_modal_button_create =
+    document.getElementById("close-modal-button-create");
+
+const close_modal_button_join =
+    document.getElementById("close-modal-button-join");
+
+const fail_modal_button =
+    document.getElementById("close-fail-modal-button");
+
+
+// ==================================================
+// Open Join Modal
+// ==================================================
+
 join_room_button.addEventListener("click", () => {
-  showModal("join-room-modal");
+    showModal("join-room-modal");
 });
 
-fail_modal_button.addEventListener("click", () => {
-  hideModal("failmodal");
-});
+
+// ==================================================
+// Create Room
+// ==================================================
 
 create_room_button.addEventListener("click", async () => {
-  try {
-    const room = await create_room();
+    try {
+        const room = await create_room();
 
-    setRoomCode(room.room_code);
+        // Store the room code
+        currentRoomCode = room.room_code;
 
-    room_id.textContent = room.room_code;
+        // Display it
+        room_id.textContent = currentRoomCode;
 
-    showModal("create-room-modal");
-  } catch (error) {
-    console.error("Error creating room:", error);
-  }
+        showModal("create-room-modal");
+
+    } catch (error) {
+        console.error("Error creating room:", error);
+    }
 });
 
+
+// ==================================================
+// Join Room
+// ==================================================
+
 submit_room_code_button.addEventListener("click", async (event) => {
-  const code = room_code_input.value.trim();
+    const code = room_code_input.value.trim();
 
-  if (code === "") {
-    errorMsg.textContent = "This field cannot be empty";
-    event.preventDefault();
-    return;
-  }
+    if (code === "") {
+        errorMsg.textContent = "This field cannot be empty";
+        event.preventDefault();
+        return;
+    }
 
-  errorMsg.textContent = "";
+    errorMsg.textContent = "";
 
-  try {
-    const room = await join_room(code);
+    try {
+        const room = await join_room(code);
 
-    setRoomCode(room.room_code);
+        // Store joined room
+        currentRoomCode = room.room_code;
 
+        hideModal("join-room-modal");
+
+        // Go to lobby
+        window.location.href =
+            `/lobby?room_code=${encodeURIComponent(currentRoomCode)}`;
+
+    } catch (error) {
+        showModal("failmodal");
+        console.error("Error joining room:", error);
+    }
+});
+
+
+// ==================================================
+// Copy Room Code
+// ==================================================
+
+copy_room_id_button.addEventListener("click", async () => {
+    if (!currentRoomCode) {
+        return;
+    }
+
+    await navigator.clipboard.writeText(currentRoomCode);
+});
+
+
+// ==================================================
+// Create Room Modal → Lobby
+// ==================================================
+
+close_modal_button_create.addEventListener("click", () => {
+    if (!currentRoomCode) {
+        return;
+    }
+
+    hideModal("create-room-modal");
+
+    window.location.href =
+        `/lobby?room_code=${encodeURIComponent(currentRoomCode)}`;
+});
+
+
+// ==================================================
+// Close Join Modal
+// ==================================================
+
+close_modal_button_join.addEventListener("click", () => {
     hideModal("join-room-modal");
-  } catch (error) {
-    showModal("failmodal");
-    console.error("Error!!!!!!!!!");
-  }
+});
+
+
+// ==================================================
+// Close Failure Modal
+// ==================================================
+
+fail_modal_button.addEventListener("click", () => {
+    hideModal("failmodal");
 });

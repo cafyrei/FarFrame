@@ -70,7 +70,6 @@ class RoomManager:
         finally:
             db.close()       
             
-            
     def room_exists(self, room_code):
         db = SessionLocal()
         try:
@@ -83,9 +82,7 @@ class RoomManager:
         
         finally:
             db.close()
-        
-         
-
+    
     def leave_room(self, room_id, user):
         pass
 
