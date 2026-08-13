@@ -1,6 +1,6 @@
 from fastapi import WebSocket, WebSocketDisconnect, APIRouter
-from app.services.roomManager import RoomManager
 from app.services.connectionManager import ConnectionManager
+from app.services.roomManager import RoomManager
 
 router = APIRouter()
 
@@ -14,13 +14,32 @@ async def websocket_endpoint(websocket: WebSocket, room_code: str):
         await websocket.close()
         return
 
-    await connectionManager.connect(websocket, room_code)
-
+    participants_in_session = await connectionManager.connect(websocket, room_code)
+    
+    await connectionManager.broadcast_to_anyone(
+        {
+            "type": "participant_count",
+            "count": participants_in_session
+        },
+        room_code
+    )
+    
+    # Broadcaast of Data Received from the JavaScript
     try:
         while True:
             
             data = await websocket.receive_json()
-            await connectionManager.broadcast_to_room(data, room_code, sender=websocket)
+        
+            await connectionManager.broadcast_to_others(data, room_code, sender=websocket)
             
     except WebSocketDisconnect:
-        connectionManager.disconnect(websocket, room_code)
+        participants_in_session = connectionManager.disconnect(websocket, room_code)
+        
+        await connectionManager.broadcast_to_anyone(
+        {
+            "type": "participant_count",
+            "count": participants_in_session
+        },
+        room_code
+    )
+    

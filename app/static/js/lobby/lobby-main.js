@@ -9,11 +9,7 @@ export function updateRoomId() {
     room_id.textContent = room_code;
 }
 
-export function updateParticipantCount(joined) {
-
-    const currentCount = parseInt(number_of_participants.textContent, 10) || 0;
-    
-    const newCount = Math.max(0, currentCount + (joined ? 1 : -1));
+export function updateParticipantCount(newCount) {
     
     number_of_participants.textContent = newCount;
 }
