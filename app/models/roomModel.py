@@ -1,10 +1,7 @@
 from sqlalchemy import Column, DateTime, Integer, SmallInteger, String, func
 from sqlalchemy.orm import DeclarativeBase
-
-
 class Base(DeclarativeBase):
     pass
-
 
 class Room(Base):
     __tablename__ = "room"
