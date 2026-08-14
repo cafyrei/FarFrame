@@ -1,6 +1,7 @@
 import { updateRoomId, updateParticipantCount } from "./lobby-main.js";
 
 const test_button = document.getElementById("test-socket");
+const startBtn = document.getElementById("startBtn");
 
 updateRoomId();
 
@@ -13,9 +14,8 @@ const socket = new WebSocket(
 
 // Catch: Going back will close the socket
 window.addEventListener("pagehide", () => {
-    socket.close();
+  socket.close();
 });
-
 
 // Socket Open when a user join
 socket.onopen = () => {
@@ -26,17 +26,37 @@ socket.onmessage = (event) => {
   const data = JSON.parse(event.data);
 
   if (data.type === "participant_count") {
-        updateParticipantCount(data.count)
+    updateParticipantCount(data.count);
+  }
+
+  if (data.type === "start_session") {
+    window.location.href = `/session?room_code=${encodeURIComponent(room_code)}`;
   }
 
   console.log("Received:", data);
 };
+
+// =============================
+//   TEST BUTTON DELETE AFTER
+// =============================
 
 test_button?.addEventListener("click", () => {
   socket.send(
     JSON.stringify({
       type: "test",
       message: "Hello!",
+    }),
+  );
+});
+
+// =============================
+//      UP TO THIS POINT
+// =============================
+
+startBtn.addEventListener("click", () => {
+  socket.send(
+    JSON.stringify({
+      type: "start_session",
     }),
   );
 });

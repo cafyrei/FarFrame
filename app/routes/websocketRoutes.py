@@ -29,8 +29,11 @@ async def websocket_endpoint(websocket: WebSocket, room_code: str):
         while True:
             
             data = await websocket.receive_json()
-        
-            await connectionManager.broadcast_to_others(data, room_code, sender=websocket)
+            
+            if (data.get("type") ==  "start_session"):
+                await connectionManager.broadcast_to_anyone(data, room_code)
+            else:
+                await connectionManager.broadcast_to_others(data, room_code, sender=websocket)
             
     except WebSocketDisconnect:
         participants_in_session = connectionManager.disconnect(websocket, room_code)
