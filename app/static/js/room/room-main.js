@@ -7,6 +7,7 @@ import { showModal, hideModal } from "../utils/modal-utils.js";
 // ==================================================
 
 let currentRoomCode = null;
+let participantId = null;
 
 
 // ==================================================
@@ -63,6 +64,7 @@ create_room_button.addEventListener("click", async () => {
 
         // Store the room code
         currentRoomCode = room.room_code;
+        participantId = room.participantId;
 
         // Display it
         room_id.textContent = currentRoomCode;
@@ -95,12 +97,13 @@ submit_room_code_button.addEventListener("click", async (event) => {
 
         // Store joined room
         currentRoomCode = room.room_code;
+        participantId = room.participantId;
 
         hideModal("join-room-modal");
 
         // Go to lobby
         window.location.href =
-            `/lobby?room_code=${encodeURIComponent(currentRoomCode)}`;
+            `/lobby?room_code=${encodeURIComponent(currentRoomCode)}&participantId=${encodeURIComponent(participantId)}`;
 
     } catch (error) {
         showModal("failmodal");
@@ -134,7 +137,7 @@ close_modal_button_create.addEventListener("click", () => {
     hideModal("create-room-modal");
 
     window.location.href =
-        `/lobby?room_code=${encodeURIComponent(currentRoomCode)}`;
+        `/lobby?room_code=${encodeURIComponent(currentRoomCode)}&participantId=${encodeURIComponent(participantId)}`;
 });
 
 

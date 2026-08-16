@@ -7,14 +7,14 @@ router = APIRouter()
 connectionManager = ConnectionManager()
 roomManager = RoomManager()
 
-@router.websocket("/ws/{room_code}")
-async def websocket_endpoint(websocket: WebSocket, room_code: str):
+@router.websocket("/ws/{room_code}/{participantId}")
+async def websocket_endpoint(websocket: WebSocket, room_code: str, participantId: str):
 
     if not roomManager.room_exists(room_code):
         await websocket.close()
         return
 
-    participants_in_session = await connectionManager.connect(websocket, room_code)
+    participants_in_session = await connectionManager.connect(websocket, room_code, participantId)
     
     await connectionManager.broadcast_to_anyone(
         {

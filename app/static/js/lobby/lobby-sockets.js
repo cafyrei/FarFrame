@@ -7,9 +7,10 @@ updateRoomId();
 
 // Setup WebSocket
 const room_code = new URLSearchParams(window.location.search).get("room_code");
+const participantId = new URLSearchParams(window.location.search).get("participantId");
 const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
 const socket = new WebSocket(
-  `${protocol}//${window.location.host}/ws/${room_code}`,
+  `${protocol}//${window.location.host}/ws/${room_code}/${participantId}`,
 );
 
 // Catch: Going back will close the socket

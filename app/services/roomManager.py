@@ -1,5 +1,3 @@
-
-
 from app.schemas.room import JoinRoomRequest
 
 from datetime import datetime, timedelta
@@ -8,7 +6,7 @@ from fastapi import HTTPException
 import traceback # Debugging: Import traceback for error handling
 
 from app.models.roomModel import Room
-from app.services.code_generator import generate_room_code
+from app.services.code_generator import generate_room_code, generate_participant_id
 from app.database import SessionLocal
 
 class RoomManager:
@@ -18,6 +16,7 @@ class RoomManager:
     def create_room(self):
         
         room_code = generate_room_code()
+        participantId = generate_participant_id()
         
         db = SessionLocal()
         
@@ -31,8 +30,12 @@ class RoomManager:
             db.commit()
             db.refresh(room)
 
-            return room.room_code
-        
+            return {
+                "room_code": room_code,
+                "participantId" : "partic" + participantId,
+                "role": "host"
+            }
+                
         except Exception as e:
             db.rollback()
     
@@ -47,6 +50,9 @@ class RoomManager:
             db.close()
                 
     def join_room(self, request: JoinRoomRequest):
+        
+        participantId = generate_participant_id()
+        
         db = SessionLocal()
         
         try:
@@ -65,6 +71,8 @@ class RoomManager:
             return {
                 "message": "Joined successfully",
                 "room_code": room.room_code,
+                "participantId" : "partic" + participantId,
+                "role" : "guest"
             }
 
         finally:
