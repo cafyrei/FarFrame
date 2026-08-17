@@ -90,9 +90,3 @@ class RoomManager:
         
         finally:
             db.close()
-    
-    def leave_room(self, room_id, user):
-        pass
-
-    def get_users_in_room(self, room_id):
-        pass

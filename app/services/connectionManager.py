@@ -43,5 +43,6 @@ class ConnectionManager:
             for participant in self.rooms[room_code]:
                 await participant["websocket"].send_json(message)
     
-    async def unicast_to_new_participant(self, websocket: WebSocket):
-        pass
+    async def unicast_to_new_participant(self, message: dict, room_code: str, sender: WebSocket):
+        if room_code in self.rooms:
+            await sender.send_json(message)

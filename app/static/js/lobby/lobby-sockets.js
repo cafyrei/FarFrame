@@ -6,7 +6,6 @@ const startBtn = document.getElementById("startBtn");
 
 const socket = getSocket();
 
-
 updateRoomId();
 
 if (socket) {
@@ -22,19 +21,18 @@ if (socket) {
 
   socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
+    // console.log("Data:", data);  // Data Check
 
     switch (data.type) {
       case "participant_count":
-        console.log("ROLE RECEIVED:", data.role);
         updateParticipantCount(data.count);
+        break;
 
-        if (data.role === "host") {
-          startBtn.style.display = "block";
-        }
+      case "role":
+        if (data.role === "host") startBtn.style.display = "block";
         break;
 
       case "start_session":
-        // FIX: Using imported roomCode & participantId
         window.location.href = buildRoomUrl("/session");
         break;
 
@@ -42,8 +40,8 @@ if (socket) {
         console.log("Test message:", data.message);
         break;
 
-      default:
-        console.log("Unknown message:", data);
+      // default:
+      // console.log("Unknown message:", data);
     }
   };
 
@@ -52,7 +50,9 @@ if (socket) {
     socket.close();
   });
 } else {
-  console.error("Failed to initialize WebSocket: Missing required parameters or connection error.");
+  console.error(
+    "Failed to initialize WebSocket: Missing required parameters or connection error.",
+  );
 }
 
 startBtn?.addEventListener("click", () => {
@@ -60,7 +60,7 @@ startBtn?.addEventListener("click", () => {
     socket.send(
       JSON.stringify({
         type: "start_session",
-      })
+      }),
     );
   } else {
     console.warn("WebSocket is not connected yet.");
@@ -77,7 +77,7 @@ test_button?.addEventListener("click", () => {
       JSON.stringify({
         type: "test",
         message: "Hello!",
-      })
+      }),
     );
   }
 });

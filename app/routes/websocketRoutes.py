@@ -36,13 +36,22 @@ async def websocket_endpoint(websocket: WebSocket, room_code: str, participantId
         {
             "type": "participant_count",
             "count": participants_in_session,
-            "role" : participant_data["role"]
         },
         room_code
     )
     
     # Broadcaast of Data Received from the JavaScript
     try:
+        
+        await connectionManager.unicast_to_new_participant(
+            {
+                "type" : "role",
+                "role" : participant_data["role"]
+            }, 
+            room_code,
+            sender=websocket
+        )
+        
         while True:
             
             # Data fetched from js: lobby-sockets.js

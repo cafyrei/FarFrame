@@ -20,6 +20,8 @@ class SessionManager :
                 if participant == participantId:
                     return True
         return False
+    
+    
             
         
 # All classes that need Session Manager get data on this instance
