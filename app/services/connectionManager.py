@@ -5,20 +5,12 @@ class ConnectionManager:
     def __init__(self):
         self.rooms: dict[str, list[WebSocket]] = {}
         
-    async def connect(self,websocket: WebSocket,room_code: str,participant_id: str):
-
+    async def connect(self,websocket: WebSocket,room_code: str, participant_data: dict):
+        
         await websocket.accept()
 
         if room_code not in self.rooms:
             self.rooms[room_code] = []
-
-        participant = sessionManager.participants[room_code][participant_id]
-
-        participant_data = {
-            "participantId": participant_id,
-            "role": participant["role"],
-            "websocket": websocket
-        }
 
         self.rooms[room_code].append(participant_data)
 
@@ -28,23 +20,25 @@ class ConnectionManager:
         
     def disconnect(self, websocket: WebSocket, room_code: str):
         if room_code in self.rooms:
-            if websocket in self.rooms[room_code]:
-                self.rooms[room_code].remove(websocket)
-                participant_count = len(self.rooms[room_code])
-
-            if not self.rooms[room_code]:
-                del self.rooms[room_code]
+            for participant in self.rooms[room_code]:
+                if participant["websocket"] == websocket:
+                    self.rooms[room_code].remove(participant)                
                 
+        if not self.rooms[room_code]:
+            del self.rooms[room_code]
+            
+        participant_count = len(self.rooms[room_code])
+
         return participant_count
             
     async def broadcast_to_others(self, message: dict, room_code: str, sender: WebSocket):
         if room_code in self.rooms:    
-            for connection in self.rooms[room_code]:
-                if connection != sender:
-                    await connection.send_json(message)
+            for participant in self.rooms[room_code]:
+                if sender != participant["websocket"]:
+                    await participant["websocket"].send_json(message)
                     
     async def broadcast_to_anyone(self, message: dict, room_code: str):
         if room_code in self.rooms:    
-            for connection in self.rooms[room_code]:
-                await connection.send_json(message)
+            for participant in self.rooms[room_code]:
+                await participant["websocket"].send_json(message)
     

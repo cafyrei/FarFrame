@@ -23,6 +23,12 @@ socket.onopen = () => {
   console.log("Connected to room:", room_code);
 };
 
+// Sockett Participant Entry Denied (Fabricated Id)
+socket.onclose = (event) => {
+    console.log("Socket closed:", event.code);
+};
+
+
 socket.onmessage = (event) => {
   const data = JSON.parse(event.data);
 
