@@ -35,7 +35,8 @@ async def websocket_endpoint(websocket: WebSocket, room_code: str, participantId
     await connectionManager.broadcast_to_anyone(
         {
             "type": "participant_count",
-            "count": participants_in_session
+            "count": participants_in_session,
+            "role" : participant_data["role"]
         },
         room_code
     )
@@ -47,7 +48,7 @@ async def websocket_endpoint(websocket: WebSocket, room_code: str, participantId
             # Data fetched from js: lobby-sockets.js
             data = await websocket.receive_json()
             
-            if (data.get("type") ==  "start_session"):
+            if (data.get("type") == "start_session"):
                 await connectionManager.broadcast_to_anyone(data, room_code)
             else:
                 await connectionManager.broadcast_to_others(data, room_code, sender=websocket)
