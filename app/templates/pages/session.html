@@ -4,16 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="/static/favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="/static/css/pages/session-main.css">
+    <link rel="stylesheet" href="/static/css/pages/session-main.css" />
     <title>Room</title>
   </head>
   <body>
-
     <div class="webcam-container">
-
-      <div class="video-grid">
-    
-      </div>
+      <div class="video-grid"></div>
 
       <div class="camera-controls">
         <button class="button" id="cameraBtn">Capture</button>
@@ -21,7 +17,9 @@
       </div>
     </div>
 
-    <script src="/static/js/session/session-main.js"></script>
+    <button class="button" id="testBtn">Send a Message</button>
+
+    <script type="module" src="/static/js/session/session-main.js"></script>
     <script type="module" src="/static/js/session/session-rtc.js"></script>
   </body>
 </html>

@@ -1,15 +1,56 @@
-import { getSocket, buildRoomUrl } from "../utils/socket.js";
+import { getSocket } from "../utils/socket.js";
+import { initLocalVideo } from "./session-main.js";
 
 const socket = getSocket();
 
-if (socket) {
-  socket.onopen = () => {
-    console.log("Connected");
-  };
+// WebRTC stream connetion
+const peerConnection = new RTCPeerConnection();
 
-  socket.onclose = (event) => {
-    console.log("Socket closed:", event.code);
-  };
+export async function establishRTCOffer() {
+  if (peerConnection) {
+    const localStream = await initLocalVideo();
+    const tracks = localStream.getTracks();
 
-  
+    tracks.forEach((track) => {
+      peerConnection.addTrack(track, localStream);
+    });
+
+    // Initiator: Creates an offer
+    const offer = await peerConnection.createOffer();
+    await peerConnection.setLocalDescription(offer);
+
+    socket.send(
+      JSON.stringify({
+        type: "offer",
+        offer: offer,
+      }),
+    );
+  }
+}
+
+export async function handleOffer(offer) {
+  if (peerConnection) {
+    const localStream = await initLocalVideo();
+    const tracks = localStream.getTracks();
+
+    tracks.forEach((track) => {
+      peerConnection.addTrack(track, localStream);
+    });
+    
+    await peerConnection.setRemoteDescription(offer);
+
+    const answer = await peerConnection.createAnswer();
+    await peerConnection.setLocalDescription(answer);
+
+    socket.send(
+      JSON.stringify({
+        type: "answer",
+        answer: answer,
+      }),
+    );
+  }
+}
+
+export async function handleAnswer(answer) {
+    
 }

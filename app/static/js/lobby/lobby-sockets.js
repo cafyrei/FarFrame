@@ -29,7 +29,10 @@ if (socket) {
         break;
 
       case "role":
-        if (data.role === "host") startBtn.style.display = "block";
+        if (data.role === "host"){
+          startBtn.style.display = "block";
+          console.log(data.role);
+        }
         break;
 
       case "start_session":
