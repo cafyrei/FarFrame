@@ -1,5 +1,10 @@
 import { getSocket } from "../utils/socket.js";
-import { establishRTCOffer, handleOffer } from "./session-rtc.js";
+import {
+  establishRTCOffer,
+  handleOffer,
+  handleAnswer,
+  handleCandidate,
+} from "./session-rtc.js";
 
 // WebSocket Connection
 const socket = getSocket();
@@ -38,9 +43,13 @@ if (socket) {
         break;
       case "answer":
         handleAnswer(data.answer);
-        break
+        break;
+      case "candidate":
+        handleCandidate(data.candidate);
+        break;
     }
 
+    // This Establish(starts) the handshake
     if (!offeredStarted) {
       if (isHost && partipantCount === 2) {
         offeredStarted = true;

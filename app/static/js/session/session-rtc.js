@@ -6,6 +6,17 @@ const socket = getSocket();
 // WebRTC stream connetion
 const peerConnection = new RTCPeerConnection();
 
+peerConnection.onicecandidate = (event) => {
+  if (event.candidate) {
+    socket.send(
+      JSON.stringify({
+        type: "candidate",
+        candidate: event.candidate,
+      }),
+    );
+  }
+};
+
 export async function establishRTCOffer() {
   if (peerConnection) {
     const localStream = await initLocalVideo();
@@ -36,7 +47,7 @@ export async function handleOffer(offer) {
     tracks.forEach((track) => {
       peerConnection.addTrack(track, localStream);
     });
-    
+
     await peerConnection.setRemoteDescription(offer);
 
     const answer = await peerConnection.createAnswer();
@@ -52,5 +63,13 @@ export async function handleOffer(offer) {
 }
 
 export async function handleAnswer(answer) {
-    
+  if (peerConnection) {
+    await peerConnection.setRemoteDescription(answer);
+  }
+}
+
+export async function handleCandidate(candidate) {
+  const data = candidate;
+
+  await peerConnection.addIceCandidate(data);
 }
