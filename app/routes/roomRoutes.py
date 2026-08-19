@@ -1,27 +1,34 @@
 from app.schemas.room import JoinRoomRequest
 from fastapi import APIRouter, HTTPException
 from app.services.roomManager import RoomManager
+from app.services.sessionManager import sessionManager
 
 import traceback # Debug Module
 
 router = APIRouter()
 
-# Initialize the RoomManager
+# Initialize the Manager Classes
 room_manager = RoomManager() # this will manage the rooms and their users
 
 @router.post("/room")
 def create_room():
-    room_code = room_manager.create_room()
     
-    return {
-        "room_code": room_code,
-    }
+    room_information = room_manager.create_room()
+    
+    sessionManager.add_participant(room_information)
+
+    return room_information
 
 @router.post("/room/join")
 def join_room(request: JoinRoomRequest):
     
-    try:        
-        return room_manager.join_room(request)
+    try:
+        
+        guest_information = room_manager.join_room(request)
+        
+        sessionManager.add_participant(guest_information)
+        
+        return guest_information
     
     except HTTPException as e:
         raise e

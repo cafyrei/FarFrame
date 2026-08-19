@@ -1,52 +1,90 @@
-const videoElement = document.getElementById("webcam");
+import { roomCode, getSocket } from "../utils/socket.js";
+
+const videoGrid =
+  document.querySelector(".video-grid") ||
+  document.getElementById("video-grid");
 const cameraBtn = document.getElementById("cameraBtn");
 const muteBtn = document.getElementById("muteBtn");
 
-let mediaStream = null
+let mediaStream = null;
 
-cameraBtn.addEventListener("click", () => {
-    startMedia();
-
-    console.log("start");
-});
-
+// Initialize camera on startup
+initLocalVideo();
 
 muteBtn.addEventListener("click", () => {
-    stopMedia();
-    console.log("end");
+  stopMedia();
+  console.log("end");
 });
 
+function updateParticipants(event) {
+  const data = JSON.parse(event.data);
+
+  let participant_count = null;
+
+  if (data.type === "participant_count") {
+    participant_count = data.count;
+  }
+}
+
+function addParticipantVideo(participantId, stream) {
+  if (document.getElementById(`video-${participantId}`)) return;
+
+  const videoElement = document.createElement("video");
+  videoElement.id = `video-${participantId}`;
+  videoElement.autoplay = true;
+  videoElement.playsInline = true;
+  videoElement.srcObject = stream;
+
+  if (participantId === "local") {
+    videoElement.muted = true;
+  }
+
+  videoGrid.appendChild(videoElement);
+}
 
 async function startMedia() {
-    try {
-        mediaStream =  await navigator.mediaDevices.getUserMedia(
-            {
-                video: {
-                    width : { ideal: 1280 },
-                    height : { ideal: 720 },
-                    facingMode: "user"
-                }
-            }
-        )
-    } catch (error) {
-        console.error('Error accessing media devices:', error);
-        if (error.name === 'NotAllowedError') {
-          alert('Permission denied. Please allow camera and microphone access.');
-        } else if (error.name === 'NotFoundError') {
-          alert('No webcam or microphone found on this device.');
-        } else {
-          alert(`Error: ${error.message}`);
-        }
+  try {
+    mediaStream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        width: { ideal: 1280 },
+        height: { ideal: 720 },
+        facingMode: "user",
+      },
+      audio: true,
+    });
+    return mediaStream;
+  } catch (error) {
+    console.error("Error accessing media devices:", error);
+    if (error.name === "NotAllowedError") {
+      alert("Permission denied. Please allow camera.");
+    } else if (error.name === "NotFoundError") {
+      alert("No webcam or microphone found on this device.");
+    } else {
+      alert(`Error: ${error.message}`);
     }
+    return null;
+  }
+}
+
+async function initLocalVideo() {
+  const stream = await startMedia();
+  if (stream) {
+    addParticipantVideo("local", stream);
+  }
+
+  return stream;
 }
 
 function stopMedia() {
-    if (mediaStream) {
-        mediaStream.getTracks().forEach(track => track.stop());
+  if (mediaStream) {
+    mediaStream.getTracks().forEach((track) => track.stop());
 
-        videoElement.srcObject = null
-
-        cameraBtn.disabled = false;
-        muteBtn.disabled = false;
+    const localVideo = document.getElementById("video-local");
+    if (localVideo) {
+      localVideo.srcObject = null;
     }
+
+    cameraBtn.disabled = false;
+    muteBtn.disabled = false;
+  }
 }
