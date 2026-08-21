@@ -1,4 +1,4 @@
-import { roomCode, getSocket } from "../utils/socket.js";
+import { roomCode, getSocket, participantId } from "../utils/socket.js";
 
 const videoGrid =
   document.querySelector(".video-grid") ||
@@ -45,7 +45,7 @@ export function addParticipantVideo(participantId, stream) {
 export async function initLocalVideo() {
   const stream = await startMedia();
   if (stream) {
-    addParticipantVideo("local", stream);
+    addParticipantVideo(participantId, stream);
   }
 
   return stream;

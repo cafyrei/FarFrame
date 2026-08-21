@@ -39,10 +39,10 @@ if (socket) {
         partipantCount = data.count;
         break;
       case "offer":
-        handleOffer(data.offer);
+        handleOffer(data.offer, data.participantId);
         break;
       case "answer":
-        handleAnswer(data.answer);
+        handleAnswer(data.answer, data.participantId);
         break;
       case "candidate":
         handleCandidate(data.candidate);
