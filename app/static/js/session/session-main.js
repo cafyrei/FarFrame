@@ -1,4 +1,4 @@
-import { roomCode, getSocket } from "../utils/socket.js";
+import { roomCode, getSocket, participantId } from "../utils/socket.js";
 
 const videoGrid =
   document.querySelector(".video-grid") ||
@@ -26,7 +26,7 @@ function updateParticipants(event) {
   }
 }
 
-function addParticipantVideo(participantId, stream) {
+export function addParticipantVideo(participantId, stream) {
   if (document.getElementById(`video-${participantId}`)) return;
 
   const videoElement = document.createElement("video");
@@ -40,6 +40,15 @@ function addParticipantVideo(participantId, stream) {
   }
 
   videoGrid.appendChild(videoElement);
+}
+
+export async function initLocalVideo() {
+  const stream = await startMedia();
+  if (stream) {
+    addParticipantVideo(participantId, stream);
+  }
+
+  return stream;
 }
 
 async function startMedia() {
@@ -66,14 +75,6 @@ async function startMedia() {
   }
 }
 
-async function initLocalVideo() {
-  const stream = await startMedia();
-  if (stream) {
-    addParticipantVideo("local", stream);
-  }
-
-  return stream;
-}
 
 function stopMedia() {
   if (mediaStream) {
