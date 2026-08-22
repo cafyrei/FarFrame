@@ -1,0 +1,25 @@
+{
+  "name": "distant-booth",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/cafyrei/FarFrame#readme",
+  "bugs": {
+    "url": "https://github.com/cafyrei/FarFrame/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cafyrei/FarFrame.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx @tailwindcss/cli -i ./src/input.css -o ./app/static/css/style.css --watch"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "tailwindcss": "^4.3.3"
+  }
+}
