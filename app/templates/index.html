@@ -6,27 +6,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="/static/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="/static/css/style.css" />
-    <title>Index</title>
+    <title>FarFrame</title>
   </head>
   <body>
-    <div class="m-1">
-      <div class="Tagline">Capture the moment, even from miles apart.</div>
+    <!-- Outer page container taking full viewport height -->
+    <div
+      class="flex flex-col items-center min-h-screen p-6 max-w-5xl mx-auto text-center"
+    >
+      <!-- TOP SPACER: Pushes the hero down into dead center -->
+      <div class="flex-1"></div>
 
-      <div class="buttons">
-        <button id="create-room-button">Create Room</button>
-        <button id="join-room-button">Join Room</button>
+      <!-- HERO SECTION: Perfectly centered on the screen -->
+      <div class="flex flex-col items-center gap-6 w-full">
+        <!-- Tagline Group -->
+        <div class="flex flex-col items-center gap-4">
+          <img
+            src="../static/images/icons/FarFrame.png"
+            alt="FarFrame-Logo"
+            class="w-[420px] h-auto object-contain"
+          />
+          <p class="text-gray-600 font-medium text-lg">
+            Capture the moment, even from miles apart.
+          </p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-row justify-center gap-4">
+          <button
+            class="bg-[#E48CA3] hover:bg-[#d4597a] text-white font-medium cursor-pointer px-5 py-2.5 rounded-lg transition-colors"
+            id="create-room-button"
+          >
+            Create Room
+          </button>
+          <button
+            class="bg-[#E48CA3] hover:bg-[#d4597a] text-white font-medium cursor-pointer px-5 py-2.5 rounded-lg transition-colors"
+            id="join-room-button"
+          >
+            Join Room
+          </button>
+        </div>
       </div>
 
-      <div>
-        <h2>Capture the moment, even from miles apart.</h2>
-        <h3>
+      <!-- Pushes the description box down to the bottom -->
+      <div class="flex-1"></div>
+
+      <!-- ABOUT / DESCRIPTION SECTION: Rest naturally at the bottom -->
+      <div class="flex flex-col gap-2 text-gray-700 p-6 w-full mt-auto">
+        <h3
+          class="text-sm font-semibold leading-relaxed border text-gray-500 bg-black/3 border-black/2 p-3 rounded-2xl"
+        >
           FarFrame is an online photo booth that brings people together wherever
           they are. Create a room, invite your friends with a code, and capture
           shared moments in real time—all from your own devices.
         </h3>
-        <p>
+        <p class="text-xs text-gray-500">
           No downloads. No complicated setup. Just create a room, connect, and
-          smile.
+          smile. 
+          <span class="text-[#d4597a] underline">
+            <a href="#">More</a>
+          </span>
         </p>
       </div>
     </div>
@@ -45,7 +83,7 @@
     </div>
 
     <!-- Display Room ID Modal -->
-    <div id="create-room-modal" class="modal ">
+    <div id="create-room-modal" class="modal hidden">
       <div class="modal-content flex flex-col gap-4">
         <!-- Modal Header -->
         <div class="modal-header flex flex-row justify-between items-center">
@@ -96,7 +134,6 @@
         </button>
       </div>
     </div>
-    
 
     <div id="failmodal" class="modal hidden">
       <div class="modal-content">
