@@ -1,4 +1,4 @@
-import { roomCode, getSocket, participantId } from "../utils/socket.js";
+import {participantId } from "../utils/socket.js";
 
 const videoGrid =
   document.querySelector(".video-grid") ||
