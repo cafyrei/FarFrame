@@ -17,17 +17,17 @@
     <div
       class="flex flex-col items-center min-h-screen p-6 max-w-5xl mx-auto text-center"
     >
-      <!-- TOP SPACER: Pushes the hero down into dead center -->
+      <!-- TOP SPACER -->
       <div class="flex-1"></div>
 
-      <!-- HERO SECTION: Perfectly centered on the screen -->
+      <!-- HERO SECTION -->
       <div class="flex flex-col items-center gap-6 w-full">
         <!-- Tagline Group -->
         <div class="flex flex-col items-center gap-5">
           <img
             src="../static/images/icons/FarFrame.png"
             alt="FarFrame-Logo"
-            class="w-[420px] h-auto object-contain"
+            class="w-[560px] h-auto object-contain"
           />
           <p
             class="text-gray-700 font-medium text-3xl font-satisfy drop-shadow-md"
@@ -41,15 +41,12 @@
         <div class="relative flex flex-col items-center">
           <!-- Action Buttons -->
           <div class="flex flex-row justify-center gap-4 font-basic">
-            <button
-              class="bg-[#E48CA3] hover:bg-[#fa4475] text-white font-medium cursor-pointer px-5 py-2.5 rounded-lg transition-colors"
-              id="create-room-button"
-            >
+            <button class="primary-btn" id="create-room-button">
               Create Room
             </button>
 
             <button
-              class="bg-white hover:bg-[#fa4475] text-[#fa4475] hover:text-white font-medium cursor-pointer px-5 py-2.5 rounded-lg transition-colors border-2 border-[#E48CA3]"
+              class="primary-btn bg-white hover:bg-[#fa4475] text-[#fa4475] hover:text-white border-2 border-[#E48CA3]"
               id="join-room-button"
             >
               Join Room
@@ -69,7 +66,7 @@
 
             <div class="flex gap-3">
               <input
-                class="bg-white p-2 border border-black/3 rounded-full flex-1 min-w-0 text-center items-center"
+                class="bg-white p-2 rounded-full flex-1 min-w-0 text-center items-center uppercase font-bold"
                 type="text"
                 id="room-code-input"
                 placeholder="Room Code"
@@ -77,11 +74,11 @@
 
               <button
                 id="submit-room-code-button"
-                class="bg-[#f36c90] text-white p-3 rounded-full cursor-pointer hover:bg-[#fa4475]"
+                class="text-white p-3 rounded-full primary-btn"
               >
                 <img
                   class="w-5 h-5 invert"
-                  src="/static/images/icons/arrow.png"
+                  src="/static/images/icons/arrow.svg"
                   alt="Join room"
                 />
               </button>
@@ -124,7 +121,7 @@
           >
             <img
               class="w-4 h-4"
-              src="../static/images/icons/close.png"
+              src="../static/images/icons/close.svg"
               alt="close-btn"
             />
           </button>
@@ -139,7 +136,7 @@
             id="room-id"
             type="text"
             readonly
-            class="text-center items-center font-bold font-mono bg-gray-100 px-3 py-2 rounded-lg border border-gray-200 w-full focus:outline-none"
+            class="text-center items-center font-bold font-mono bg-gray-100 px-3 py-2 rounded-full border border-gray-200 w-full focus:outline-none"
             placeholder="ABC-123"
           />
 
@@ -148,19 +145,20 @@
             class="bg-gray-100 p-2.5 hover:bg-gray-200 rounded-full shrink-0 transition-colors cursor-pointer"
           >
             <img
-              class="w-5 h-5"
-              src="../static/images/icons/copy.png"
-              alt="copy-button-icon"
+              class="w-5 h-5 object-contain"
+              src="../static/images/icons/copy.svg"
+              style="
+                filter: invert(68%) sepia(21%) saturate(1313%)
+                  hue-rotate(300deg) brightness(97%) contrast(89%);
+              "
+              alt="Copy icon"
             />
           </button>
         </div>
 
         <!-- Modal Action -->
-        <button
-          id="start-session-button"
-          class="w-full bg-[#E48CA3] hover:bg-[#e06183] cursor-pointer text-white py-2.5 rounded-lg font-semibold transition-colors"
-        >
-          Start Session
+        <button id="start-session-button" class="primary-btn rounded-full">
+          Proceed to Lobby
         </button>
       </div>
     </div>
@@ -173,7 +171,7 @@
       <img
         id="toast-icon"
         class="w-5 h-5 shrink-0"
-        src="../static/images/icons/alert.png"
+        src="../static/images/icons/alert.svg"
         alt="toast-icon"
       />
 

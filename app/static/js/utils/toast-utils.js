@@ -7,13 +7,13 @@ const THEMES = {
     bg: 'bg-red-100',
     border: 'border-red-300',
     text: 'text-red-900',
-    icon: '../static/images/icons/alert.png'
+    icon: '../static/images/icons/alert.svg'
   },
   copied: {
     bg: 'bg-blue-100',
     border: 'border-blue-300',
     text: 'text-emerald-900',
-    icon: '../static/images/icons/copied.png'
+    icon: '../static/images/icons/clipboard.svg'
   }
 };
 

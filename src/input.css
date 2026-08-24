@@ -1,41 +1,70 @@
 @import "tailwindcss";
 
 @font-face {
-    font-family: "Satisfy";
-    src: url("../fonts/Satisfy-Regular.ttf") format("truetype");
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
+  font-family: "Satisfy";
+  src: url("../fonts/Satisfy-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: "Prociono";
-    src: url("../fonts/Prociono-Regular.ttf") format("truetype");
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
+  font-family: "Prociono";
+  src: url("../fonts/Prociono-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: "Basic";
-    src: url("../fonts/Basic-Regular.ttf") format("truetype");
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
+  font-family: "Basic";
+  src: url("../fonts/Basic-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
-@layer components {
-    .modal {
-        @apply fixed inset-0 z-50 flex items-center justify-center bg-black/15 backdrop-blur-[3px] transition-all;
-    }
-    
-    .modal-content {
-        @apply relative w-full max-w-md rounded-2xl bg-white p-6 shadow-xl border border-black/10;
-    }
+@font-face {
+  font-family: "MarckScript";
+  src: url("../fonts/MarckScript-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Define standard CSS keyframes */
+@keyframes grow {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
 }
 
 @theme {
-    --font-satisfy: "Satisfy", cursive;
-    --font-prociono: "Prociono", serif;
-    --font-basic: "Basic", serif;
+  /* Fonts */
+  --font-satisfy: "Satisfy", cursive;
+  --font-prociono: "Prociono", serif;
+  --font-basic: "Basic", serif;
+  --font-marck: "MarckScript", cursive;
+  
+  /* Bind the keyframes to custom animation utility */
+  --animate-grow: grow 2s ease-in-out infinite;
+}
+
+/* Custom component utility layers */
+@layer components {
+  .modal {
+    @apply fixed inset-0 z-50 flex items-center justify-center bg-black/15 backdrop-blur-[3px] transition-all;
+  }
+
+  .modal-content {
+    @apply relative w-full max-w-md rounded-2xl bg-white p-6 shadow-xl border border-black/10;
+  }
+
+  .primary-btn {
+    @apply bg-[#E48CA3] hover:bg-[#fa4475] text-white font-medium cursor-pointer px-5 py-2.5 rounded-lg transition-colors;
+  }
 }
