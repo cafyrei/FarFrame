@@ -4,28 +4,174 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="/static/favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="/static/css/pages/lobby-main.css">
-    <title>Session Lobby</title>
+    <link rel="stylesheet" href="/static/css/pages/lobby-main.css" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <title>FarFrame | Lobby</title>
   </head>
-  <body>
-    <h1>Session Lobby</h1>
-    <p>Welcome to the session lobby. Please wait for the session to start.</p>
+  <body class="bg-[#faf2eb] min-h-screen flex flex-col">
+    <!-- NAVIGATION HEADER -->
+    <nav
+      class="flex flex-col gap-4 m-6 md:flex-row md:items-center md:justify-between"
+    >
+      <div class="flex flex-row items-center gap-3">
+        <img
+          class="w-12 h-12 shrink-0"
+          src="/static/images/visuals/heart.png"
+          alt="FarFrame Heart Logo"
+        />
+        <div>
+          <h1 class="text-black/30 text-5xl md:text-6xl font-marck">
+            <span class="text-[#f16c90]">Far</span>Frame
+          </h1>
+          <p
+            class="text-gray-700 font-medium text-base md:text-lg font-basic drop-shadow-md"
+          >
+            <span class="text-[#f36c90]">Capture the moment,</span> even from
+            miles apart.
+          </p>
+        </div>
+      </div>
 
-    <div class="lobby-container">
-      <label>
-        <span id="session-code">
-          Session Code: <span id="session-code-value"></span
-        ></span>
-      </label>
-    </div>
+      <button
+        class="mr-6 flex items-center justify-center rounded-full bg-[#fbece8] hover:bg-[#ffd6cb] p-3 font-basic cursor-pointer transition-colors"
+        title="Exit Lobby"
+        aria-label="Exit Lobby"
+      >
+        <img
+          class="w-6 h-6 object-contain"
+          src="/static/images/icons/exit.svg"
+          style="
+            filter: invert(68%) sepia(21%) saturate(1313%) hue-rotate(300deg)
+              brightness(97%) contrast(89%);
+          "
+          alt=""
+        />
+      </button>
+    </nav>
 
-    <div>
-      <p id="participants"> <span id="number-of-participants">0</span> participants</p>
-    </div>
+    <!-- MAIN LOBBY SECTION -->
+    <main
+      class="flex-[0.5] flex flex-col justify-center items-center text-center px-4 max-w-xl mx-auto w-full pb-12"
+    >
+      <div class="flex justify-center items-center flex-col relative">
+        <h1
+          class="relative text-5xl md:text-6xl font-satisfy text-black/70 inline-block"
+        >
+          Session <span class="text-[#f16c90]">Lobby</span>
+          <img
+            class="absolute -top-3 -right-8 w-8 h-8 md:w-10 md:h-10"
+            src="/static/images/visuals/double-heart.png"
+            alt=""
+          />
+        </h1>
+        <p class="text-sm font-medium text-black/50 mt-4 max-w-lg text-center">
+          You can use the photobooth on your own <br class="hidden sm:inline" />
+          or share the code with your friend.
+        </p>
+      </div>
 
-    <button id="test-socket">Send Test Message</button>
-    
-    <button id="startBtn">Start</button>
+      <div
+        class="lobby-container flex flex-col text-center justify-center mt-6 gap-6"
+      >
+        <!-- SESSION CODE BOX -->
+        <div class="flex flex-col gap-2 justify-center items-center">
+          <label
+            class="text-sm font-semibold text-center"
+            for="session-code-value"
+          >
+            Session Code
+          </label>
+
+          <div
+            class="relative flex flex-row items-center bg-gray-100 rounded-full px-6 py-3 border border-black/10 min-w-[280px]"
+          >
+            <input
+              type="text"
+              readonly
+              id="session-code-value"
+              class="bg-transparent text-2xl text-[#E48CA3] text-center font-bold focus:outline-none w-full"
+              placeholder="ABC-123"
+            />
+            <button
+              id="copy-room-id-button"
+              class="absolute right-2 p-2 hover:bg-gray-200 rounded-full shrink-0 transition-colors cursor-pointer"
+              title="Copy Session Code"
+              aria-label="Copy Session Code"
+            >
+              <img
+                class="w-5 h-5 object-contain"
+                src="/static/images/icons/copy.svg"
+                style="
+                  filter: invert(68%) sepia(21%) saturate(1313%)
+                    hue-rotate(300deg) brightness(97%) contrast(89%);
+                "
+                alt=""
+              />
+            </button>
+          </div>
+        </div>
+
+        <div class="flex flex-col justify-center items-center my-4 gap-3">
+          <!-- 1. Header with dynamic total count -->
+          <div class="flex items-center gap-2">
+            <span
+              class="text-xs uppercase tracking-wider text-black/50 font-semibold"
+            >
+              Participants
+            </span>
+            <span
+              id="number-of-participants"
+              class="bg-[#fbece8] text-[#f16c90] px-2.5 py-0.5 rounded-full text-xs font-bold border border-[#f16c90]/20"
+            >
+              1
+            </span>
+          </div>
+
+          <!-- Dynamic Avatar List -->
+          <div
+            id="participants-list"
+            class="flex flex-wrap items-center justify-center gap-4 min-h-[72px]"
+          >
+            <div class="flex flex-col items-center gap-1 animate-fade-in">
+              <div
+                class="w-14 h-14 rounded-full bg-[#fbece8] border-2 border-[#f16c90] flex items-center justify-center p-2 shadow-sm"
+              >
+                <img
+                  src="/static/images/avatars/1.png"
+                  alt="Host Avatar"
+                  class="w-8 h-8 object-contain"
+                />
+              </div>
+              <span class="text-xs font-medium text-black/70">Host</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- START BUTTON -->
+        <div class="flex flex-col text-center justify-center items-center">
+          <button
+            id="startBtn"
+            class="primary-btn rounded-full px-12 py-3 text-md font-semibold animate-grow cursor-pointer"
+          >
+            Start Session
+          </button>
+        </div>
+      </div>
+
+      <!-- FOOTER BANNER -->
+      <div
+        class="w-full mt-8 mx-auto max-w-[410px] rounded-lg border border-[#eec9d3] bg-[#fbece8] py-2 px-4 flex items-center justify-center gap-2 text-center"
+      >
+        <img
+          class="w-6 h-6 shrink-0"
+          src="/static/images/icons/camera.svg"
+          alt=""
+        />
+        <p class="font-basic text-sm text-gray-800">
+          All set! Take photos, have fun, and make memories.
+        </p>
+      </div>
+    </main>
 
     <script type="module" src="/static/js/lobby/lobby-main.js"></script>
     <script type="module" src="/static/js/lobby/lobby-sockets.js"></script>

@@ -1,58 +1,212 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="/static/css/modal.css">
-    <!-- <link rel="stylesheet" href="/static/css/style.css"> -->
-    <title>Index</title>
-</head>
-<body>
-    <button id="create-room-button">Create Room</button>
-    <button id="join-room-button">Join Room</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <title>FarFrame</title>
+  </head>
+  <body class="relative overflow-x-hidden min-h-screen bg-[#faf2eb]">
+    <div
+      class="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] max-w-full bg-[#E48CA3]/40 rounded-full blur-3xl pointer-events-none animate-pulse -z-10"
+    ></div>
 
-    <!-- Join Room Modal -->
-    <div id="join-room-modal" class="modal">
-        <div class="modal-content">
-            <h2>Join Room</h2>
-            <p>Enter Room Code:</p>
-            <label for="room-code-input" id="errMsg"></label>
-            <input type="text" id="room-code-input" placeholder="Room Code">
-            <button id="submit-room-code-button">Submit</button>
-            
-            <button id="close-modal-button-join">Close</button>  
+    <!-- Outer page container taking full viewport height -->
+    <div
+      class="flex flex-col items-center min-h-screen p-6 max-w-5xl mx-auto text-center"
+    >
+      <!-- TOP SPACER -->
+      <div class="flex-1"></div>
+
+      <!-- HERO SECTION -->
+      <div class="flex flex-col items-center gap-6 w-full">
+        <!-- Tagline Group -->
+        <div class="flex flex-col items-center gap-5">
+          <img
+            src="../static/images/icons/FarFrame.png"
+            alt="FarFrame-Logo"
+            class="w-[560px] h-auto object-contain"
+          />
+          <p
+            class="text-gray-700 font-medium text-3xl font-satisfy drop-shadow-md"
+          >
+            <span class="text-[#f36c90]">Capture the moment,</span> even from
+            miles apart.
+          </p>
         </div>
+
+        <!-- Action Area -->
+        <div class="relative flex flex-col items-center">
+          <!-- Action Buttons -->
+          <div class="flex flex-row justify-center gap-4 font-basic">
+            <button class="primary-btn" id="create-room-button">
+              Create Room
+            </button>
+
+            <button
+              class="primary-btn bg-white hover:bg-[#fa4475] text-[#fa4475] hover:text-white border-2 border-[#E48CA3]"
+              id="join-room-button"
+            >
+              Join Room
+            </button>
+          </div>
+
+          <!-- Join Room Popover -->
+          <div
+            id="join-room-container"
+            class="absolute top-full mt-6 flex flex-col gap-2 w-80 hidden translate-y-[-8px] transition-all duration-300 opacity-0"
+          >
+            <label
+              class="text-red-500 text-sm text-left"
+              for="room-code-input"
+              id="errMsg"
+            ></label>
+
+            <div class="flex gap-3">
+              <input
+                class="bg-white p-2 rounded-full flex-1 min-w-0 text-center items-center uppercase font-bold"
+                type="text"
+                id="room-code-input"
+                placeholder="Room Code"
+              />
+
+              <button
+                id="submit-room-code-button"
+                class="text-white p-3 rounded-full primary-btn"
+              >
+                <img
+                  class="w-5 h-5 invert"
+                  src="/static/images/icons/arrow.svg"
+                  alt="Join room"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pushes the description box down to the bottom -->
+      <div class="flex-1"></div>
+
+      <!-- ABOUT / DESCRIPTION SECTION: Rest naturally at the bottom -->
+      <div class="flex flex-col gap-2 text-gray-700 p-6 w-full mt-auto">
+        <h3
+          class="font-prociono text-sm leading-relaxed border text-gray-500 bg-black/2 border-black/2 p-3 rounded-2xl"
+        >
+          FarFrame is an online photo booth that brings people together wherever
+          they are. Create a room, invite your friends with a code, and capture
+          shared moments in real time—all from your own devices.
+        </h3>
+        <p class="text-xs text-gray-500">
+          No downloads. No complicated setup. Just create a room, connect, and
+          smile.
+          <span class="text-[#d4597a] underline italic">
+            <a href="#">More</a>
+          </span>
+        </p>
+      </div>
     </div>
 
     <!-- Display Room ID Modal -->
-    <div id="create-room-modal" class="modal">
-        <div class="modal-content">
-            <h2>Room Created</h2>
-            <p>Room Code: 
-                <span id="room-id"></span>
-            </p>
-
-
-            <button id="copy-room-id-button">Copy Room Code</button>
-            <button id="close-modal-button-create">Close</button>  
-            
-            <div id="start-session"> 
-                <button id="start-session-button">Start Session</button>
-            </div>
+    <div id="create-room-modal" class="modal opacity-0 -translate-y-2 hidden">
+      <div class="modal-content flex flex-col gap-4">
+        <!-- Modal Header -->
+        <div class="modal-header flex flex-row justify-between items-center">
+          <h2 class="text-xl font-bold">Room Created</h2>
+          <button
+            id="close-modal-button-create"
+            class="bg-gray-100 p-2.5 hover:bg-red-100 rounded-full transition-colors cursor-pointer"
+          >
+            <img
+              class="w-4 h-4"
+              src="../static/images/icons/close.svg"
+              alt="close-btn"
+            />
+          </button>
         </div>
+
+        <!-- Modal Body (Room Code Row) -->
+        <div class="flex flex-row items-center gap-2 justify-between">
+          <label for="room-id" class="font-medium whitespace-nowrap"
+            >Room Code:</label
+          >
+          <input
+            id="room-id"
+            type="text"
+            readonly
+            class="text-center items-center font-bold font-mono bg-gray-100 px-3 py-2 rounded-full border border-gray-200 w-full focus:outline-none"
+            placeholder="ABC-123"
+          />
+
+          <button
+            id="copy-room-id-button"
+            class="bg-gray-100 p-2.5 hover:bg-gray-200 rounded-full shrink-0 transition-colors cursor-pointer"
+          >
+            <img
+              class="w-5 h-5 object-contain"
+              src="../static/images/icons/copy.svg"
+              style="
+                filter: invert(68%) sepia(21%) saturate(1313%)
+                  hue-rotate(300deg) brightness(97%) contrast(89%);
+              "
+              alt="Copy icon"
+            />
+          </button>
+        </div>
+
+        <!-- Modal Action -->
+        <button id="start-session-button" class="primary-btn rounded-full">
+          Proceed to Lobby
+        </button>
+      </div>
     </div>
 
-    <div id="failmodal" class="modal">
-        <div class="modal-content">
-            <h2>Failed to Join Room</h2>
-            <p>Invalid Room Code. Please try again.</p>
-            <button id="close-fail-modal-button">Close</button>
-        </div>
-    </div>
+    <div
+      id="toast"
+      class="hidden fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 border px-4 py-3 rounded-xl shadow-lg transition-all duration-300 opacity-0 -translate-y-2 pointer-events-none max-w-sm mx-auto bg-white border-gray-200"
+    >
+      <!-- Dynamic Icon -->
+      <img
+        id="toast-icon"
+        class="w-5 h-5 shrink-0"
+        src="../static/images/icons/alert.svg"
+        alt="toast-icon"
+      />
 
+      <!-- Dynamic Message -->
+      <span
+        id="toast-message"
+        class="text-sm font-medium flex-1 text-left text-gray-800"
+      >
+        Notification message goes here
+      </span>
+
+      <!-- Close Button -->
+      <button
+        id="close-toast-button"
+        type="button"
+        class="text-gray-500 hover:text-gray-800 transition-colors cursor-pointer shrink-0 p-1 rounded-md hover:bg-gray-200/50"
+        aria-label="Close notification"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-4 h-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+    </div>
 
     <script type="module" src="/static/js/room/room-main.js"></script>
-</body>
+  </body>
 </html>
