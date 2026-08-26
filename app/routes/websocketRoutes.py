@@ -59,10 +59,14 @@ async def websocket_endpoint(websocket: WebSocket, room_code: str, participantId
                     sessionManager.display_data()
                     
                     await connectionManager.broadcast_to_anyone(
-                    {
-                        "type": "participant_left",
-                        "count": participants_in_session,
-                    })
+                        {
+                            "type": "participant_left",
+                            "count": participants_in_session,
+                            "participantId": participantId
+                        },
+                        room_code
+                    )
+                    return
                     
                 case {"type": "start_session"}:
                     await connectionManager.broadcast_to_anyone(data, room_code)

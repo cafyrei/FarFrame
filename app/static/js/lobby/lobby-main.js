@@ -50,6 +50,10 @@ export function createParticipantCard(roleText, randomIcon, participantId) {
     .appendChild(template.content.firstElementChild);
 }
 
+export function removeParticipantCard(particiapantId) {
+  document.getElementById(particiapantId).remove();
+}
+
 export function buttonAssignments(role) {
   const guestTemplate = document.createElement("template");
   const hostTemplate = document.createElement("template");

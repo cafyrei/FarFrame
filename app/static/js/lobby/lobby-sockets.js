@@ -2,6 +2,7 @@ import {
   updateRoomId,
   updateParticipantCount,
   createParticipantCard,
+  removeParticipantCard,
   buttonAssignments,
 } from "./lobby-main.js";
 import { getSocket, buildRoomUrl } from "../utils/socket.js";
@@ -21,9 +22,7 @@ if (socket) {
 
   // Socket Participant Entry Denied (Fabricated Id) or Disconnected
   socket.onclose = (event) => {
-    // const data =
-    console.log("close");
-    console.log("Socket closed:", event.code);
+    console.log("left");
   };
 
   socket.onmessage = (event) => {
@@ -41,8 +40,10 @@ if (socket) {
         window.location.href = buildRoomUrl("/session");
         break;
 
+      case "participant_left":
+        removeParticipantCard(data.participantId);
+        break;
       // default:
-      //   console.log("Unknown message:", data);
     }
   };
 
@@ -79,5 +80,5 @@ leaveRoomBtn?.addEventListener("click", () => {
     console.warn("WebSocket is not connected yet.");
   }
 
-  window.location.href = '/home' 
+  window.location.href = "/home";
 });
