@@ -33,7 +33,16 @@ if (socket) {
     switch (data.type) {
       case "participant_joined":
         createParticipantCard(data.role, data.avatar, data.participantId);
-        buttonAssignments(data.role);
+        if (data.role === "host"){
+          buttonAssignments(data.role);
+        }
+        break;
+        
+      case "existing_participants":
+        data.participants.forEach((participant) => {
+          createParticipantCard(participant.role, participant.avatar, participant.participantId);
+        });
+        
         break;
 
       case "start_session":

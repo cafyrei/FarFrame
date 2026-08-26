@@ -50,7 +50,15 @@ join_room_button.addEventListener("click", () => {
 // ==================================================
 
 create_room_button.addEventListener("click", async () => {
+  if (currentRoomCode !== null) {
+    showElement("create-room-modal");
+    return;
+  }
+
   try {
+    create_room_button.disabled = true;
+    create_room_button.innerText = "Processing...";
+
     const room = await create_room();
 
     // Store the room code
@@ -63,6 +71,9 @@ create_room_button.addEventListener("click", async () => {
     showElement("create-room-modal");
   } catch (error) {
     console.error("Error creating room:", error);
+  } finally {
+    create_room_button.disabled = false;
+    create_room_button.innerText = "Create Room";
   }
 });
 

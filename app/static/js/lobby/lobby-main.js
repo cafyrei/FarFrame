@@ -33,6 +33,8 @@ copyRoomBtn.addEventListener("click", async () => {
 
 export function createParticipantCard(roleText, randomIcon, participantId) {
 
+  if (document.getElementById(participantId)) return;
+
   const template = document.createElement("template");
   template.innerHTML = `
     <div id="${participantId}" class="relative flex flex-col items-center animate-fade-in">
@@ -58,16 +60,6 @@ export function buttonAssignments(role) {
   const guestTemplate = document.createElement("template");
   const hostTemplate = document.createElement("template");
 
-  guestTemplate.innerHTML = `
-    <div class="flex flex-col text-center justify-center items-center animate-grow cursor-not-allowed ">
-      <div class="rotating-border-container">
-        <p class="relative z-10 font-basic tracking-wider text-white text-md font-semibold px-12 py-3 bg-[#fab1c3] rounded-full">
-          Waiting for Host
-        </p>
-      </div>
-    </div>
-  `.trim();
-
   hostTemplate.innerHTML = `
     <div class="flex flex-col text-center justify-center items-center">
       <button
@@ -79,10 +71,6 @@ export function buttonAssignments(role) {
   `.trim();
 
   if (role === "host") {
-    roleBtnContainer.appendChild(hostTemplate.content.firstChild);
-  }
-
-  if (role === "guest") {
-    roleBtnContainer.appendChild(guestTemplate.content.firstChild);
+    roleBtnContainer.replaceChildren(hostTemplate.content.firstChild);
   }
 }
