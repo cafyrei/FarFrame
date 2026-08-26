@@ -1,8 +1,14 @@
-import { updateRoomId, updateParticipantCount } from "./lobby-main.js";
+import {
+  updateRoomId,
+  updateParticipantCount,
+  createParticipantCard,
+  removeParticipantCard,
+  buttonAssignments,
+} from "./lobby-main.js";
 import { getSocket, buildRoomUrl } from "../utils/socket.js";
 
-const test_button = document.getElementById("test-socket");
 const startBtn = document.getElementById("startBtn");
+const leaveRoomBtn = document.getElementById("leaveRoomBtn");
 
 const socket = getSocket();
 
@@ -16,35 +22,37 @@ if (socket) {
 
   // Socket Participant Entry Denied (Fabricated Id) or Disconnected
   socket.onclose = (event) => {
-    console.log("Socket closed:", event.code);
+    console.log("left");
   };
 
   socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
-    // console.log("Data:", data);  // Data Check
+    console.log("Data Check:", data); // Data Check
+    updateParticipantCount(data.count);
 
     switch (data.type) {
-      case "participant_count":
-        updateParticipantCount(data.count);
-        break;
-
-      case "role":
+      case "participant_joined":
+        createParticipantCard(data.role, data.avatar, data.participantId);
         if (data.role === "host"){
-          startBtn.style.display = "block";
-          console.log(data.role);
+          buttonAssignments(data.role);
         }
+        break;
+        
+      case "existing_participants":
+        data.participants.forEach((participant) => {
+          createParticipantCard(participant.role, participant.avatar, participant.participantId);
+        });
+        
         break;
 
       case "start_session":
         window.location.href = buildRoomUrl("/session");
         break;
 
-      case "test":
-        console.log("Test message:", data.message);
+      case "participant_left":
+        removeParticipantCard(data.participantId);
         break;
-
       // default:
-      // console.log("Unknown message:", data);
     }
   };
 
@@ -70,21 +78,16 @@ startBtn?.addEventListener("click", () => {
   }
 });
 
-// =============================
-//   TEST BUTTON DELETE AFTER
-// =============================
-
-test_button?.addEventListener("click", () => {
+leaveRoomBtn?.addEventListener("click", () => {
   if (socket && socket.readyState === WebSocket.OPEN) {
     socket.send(
       JSON.stringify({
-        type: "test",
-        message: "Hello!",
+        type: "leave_session",
       }),
     );
+  } else {
+    console.warn("WebSocket is not connected yet.");
   }
-});
 
-// =============================
-//       UP TO THIS POINT
-// =============================
+  window.location.href = "/home";
+});

@@ -42,7 +42,6 @@ const close_toast_button = document.getElementById("close-toast-button");
 // ==================================================
 
 join_room_button.addEventListener("click", () => {
-  console.log("SDASDSasSDD");
   showElement("join-room-container");
 });
 
@@ -51,7 +50,15 @@ join_room_button.addEventListener("click", () => {
 // ==================================================
 
 create_room_button.addEventListener("click", async () => {
+  if (currentRoomCode !== null) {
+    showElement("create-room-modal");
+    return;
+  }
+
   try {
+    create_room_button.disabled = true;
+    create_room_button.innerText = "Processing...";
+
     const room = await create_room();
 
     // Store the room code
@@ -64,6 +71,9 @@ create_room_button.addEventListener("click", async () => {
     showElement("create-room-modal");
   } catch (error) {
     console.error("Error creating room:", error);
+  } finally {
+    create_room_button.disabled = false;
+    create_room_button.innerText = "Create Room";
   }
 });
 
@@ -88,6 +98,8 @@ submit_room_code_button.addEventListener("click", async (event) => {
     // Store joined room
     currentRoomCode = room.room_code;
     participantId = room.participantId;
+
+    console.log(participantId);
 
     hideElement("join-room-container");
 

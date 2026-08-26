@@ -6,12 +6,14 @@ class SessionManager :
         room_code = participant["room_code"]
         participant_id = participant["participantId"]
         participant_role = participant["role"]
+        participant_avatar = participant["avatar"]
         
         if room_code not in self.participants:
             self.participants[room_code] = {}
             
         self.participants[room_code][participant_id] = {
-            "role" : participant_role
+            "role" : participant_role,
+            "avatar": participant_avatar
         }
     
     def validate_participant(self, room_code, participantId):
@@ -21,7 +23,18 @@ class SessionManager :
                     return True
         return False
     
+    def display_data(self):
+        print(self.participants)
     
+    def remove_participant(self, participantId, room_code):
+        
+        if room_code not in self.participants:
+            print("Room Code not Exisitent")
+            return
+        
+        if participantId in self.participants[room_code]:
+            del self.participants[room_code][participantId]
+        
             
         
 # All classes that need Session Manager get data on this instance

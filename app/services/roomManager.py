@@ -1,4 +1,4 @@
-from app.schemas.room import JoinRoomRequest
+from app.schemas.roomSchema import JoinRoomRequest
 
 from datetime import datetime, timedelta
 from fastapi import HTTPException
@@ -6,7 +6,7 @@ from fastapi import HTTPException
 import traceback # Debugging: Import traceback for error handling
 
 from app.models.roomModel import Room
-from app.services.code_generator import generate_room_code, generate_participant_id
+from app.services.valueGenerator import generate_room_code, generate_participant_id, generate_avatar_selector
 from app.database import SessionLocal
 
 class RoomManager:
@@ -17,6 +17,7 @@ class RoomManager:
         
         room_code = generate_room_code()
         participantId = generate_participant_id()
+        avatar = generate_avatar_selector()
         
         db = SessionLocal()
         
@@ -32,8 +33,9 @@ class RoomManager:
 
             return {
                 "room_code": room_code,
-                "participantId" : "partic" + participantId,
-                "role": "host"
+                "participantId" : "PID" + participantId,
+                "role": "host",
+                "avatar": avatar
             }
                 
         except Exception as e:
@@ -52,6 +54,10 @@ class RoomManager:
     def join_room(self, request: JoinRoomRequest):
         
         participantId = generate_participant_id()
+        avatar = generate_avatar_selector()
+        
+        
+        print(participantId)
         
         db = SessionLocal()
         
@@ -71,8 +77,9 @@ class RoomManager:
             return {
                 "message": "Joined successfully",
                 "room_code": room.room_code,
-                "participantId" : "partic" + participantId,
-                "role" : "guest"
+                "participantId" : "PID" + participantId,
+                "role" : "guest",
+                "avatar": avatar
             }
 
         finally:

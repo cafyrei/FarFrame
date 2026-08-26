@@ -1,4 +1,4 @@
-from app.schemas.room import JoinRoomRequest
+from app.schemas.roomSchema import JoinRoomRequest
 from fastapi import APIRouter, HTTPException
 from app.services.roomManager import RoomManager
 from app.services.sessionManager import sessionManager
