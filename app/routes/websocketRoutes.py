@@ -23,12 +23,15 @@ async def websocket_endpoint(websocket: WebSocket, room_code: str, participantId
         return
 
     participant = sessionManager.participants[room_code][participantId]
-    
+
     participant_data = {
         "participantId": participantId,
         "role": participant["role"],
+        "avatar": participant["avatar"],
         "websocket": websocket
     }
+    
+    print(participant_data)
 
     participants_in_session = await connectionManager.connect(websocket, room_code, participant_data)
     
@@ -46,7 +49,8 @@ async def websocket_endpoint(websocket: WebSocket, room_code: str, participantId
         await connectionManager.unicast_to_new_participant(
             {
                 "type" : "role",
-                "role" : participant_data["role"]
+                "role" : participant_data["role"],
+                "avatar": participant_data["avatar"]
             }, 
             room_code,
             sender=websocket

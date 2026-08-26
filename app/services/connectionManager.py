@@ -23,7 +23,7 @@ class ConnectionManager:
             for participant in self.rooms[room_code]:
                 if participant["websocket"] == websocket:
                     self.rooms[room_code].remove(participant)     
-                               
+
         participant_count = len(self.rooms[room_code])
                 
         if not self.rooms[room_code]:

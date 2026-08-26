@@ -42,7 +42,6 @@ const close_toast_button = document.getElementById("close-toast-button");
 // ==================================================
 
 join_room_button.addEventListener("click", () => {
-  console.log("SDASDSasSDD");
   showElement("join-room-container");
 });
 
@@ -88,6 +87,8 @@ submit_room_code_button.addEventListener("click", async (event) => {
     // Store joined room
     currentRoomCode = room.room_code;
     participantId = room.participantId;
+
+    console.log(participantId);
 
     hideElement("join-room-container");
 

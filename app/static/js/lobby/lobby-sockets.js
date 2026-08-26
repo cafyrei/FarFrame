@@ -1,4 +1,8 @@
-import { updateRoomId, updateParticipantCount } from "./lobby-main.js";
+import {
+  updateRoomId,
+  updateParticipantCount,
+  createParticipantCard,
+} from "./lobby-main.js";
 import { getSocket, buildRoomUrl } from "../utils/socket.js";
 
 const test_button = document.getElementById("test-socket");
@@ -21,7 +25,7 @@ if (socket) {
 
   socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
-    // console.log("Data:", data);  // Data Check
+    console.log("Data Check:", data); // Data Check
 
     switch (data.type) {
       case "participant_count":
@@ -29,9 +33,10 @@ if (socket) {
         break;
 
       case "role":
-        if (data.role === "host"){
-          startBtn.style.display = "block";
-          console.log(data.role);
+        if (data.role === "host") {
+          createParticipantCard('host', data.avatar);
+        } else {
+          createParticipantCard('guest', data.avatar);
         }
         break;
 
@@ -43,8 +48,8 @@ if (socket) {
         console.log("Test message:", data.message);
         break;
 
-      // default:
-      // console.log("Unknown message:", data);
+      default:
+      console.log("Unknown message:", data);
     }
   };
 

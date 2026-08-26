@@ -6,12 +6,14 @@ class SessionManager :
         room_code = participant["room_code"]
         participant_id = participant["participantId"]
         participant_role = participant["role"]
+        participant_avatar = participant["avatar"]
         
         if room_code not in self.participants:
             self.participants[room_code] = {}
             
         self.participants[room_code][participant_id] = {
-            "role" : participant_role
+            "role" : participant_role,
+            "avatar": participant_avatar
         }
     
     def validate_participant(self, room_code, participantId):

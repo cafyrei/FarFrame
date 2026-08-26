@@ -42,5 +42,5 @@ export function triggerToast(message, type = 'error') {
     document.getElementById('close-toast-button')?.addEventListener('click', () => {
         hideElement('toast');
     })
-
 }
+
