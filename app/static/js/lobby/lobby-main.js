@@ -1,3 +1,4 @@
+import { participantId } from "../utils/socket.js";
 import { triggerToast } from "../utils/toast-utils.js";
 
 const room_id = document.getElementById("session-code-value");
@@ -10,18 +11,16 @@ export function updateRoomId() {
   room_id.value = room_code;
 }
 
-export function updateParticipantCount(newCount, role = 'guest') {
+export function updateParticipantCount(newCount) {
   number_of_participants.textContent = newCount;
 }
 
 // Buttons
-
-const leaveRoomBtn = document.getElementById("leaveRoomBtn");
 const copyRoomBtn = document.getElementById("copy-room-id-button");
 
-leaveRoomBtn.addEventListener("click", () => {
-  history.back();
-});
+// Containers
+
+const roleBtnContainer = document.getElementById("role-btn");
 
 copyRoomBtn.addEventListener("click", async () => {
   try {
@@ -32,10 +31,11 @@ copyRoomBtn.addEventListener("click", async () => {
   }
 });
 
-export function createParticipantCard(roleText = 'guest', randomIcon) {
+export function createParticipantCard(roleText, randomIcon, participantId) {
+
   const template = document.createElement("template");
   template.innerHTML = `
-    <div class="relative flex flex-col items-center animate-fade-in">
+    <div id="${participantId}" class="relative flex flex-col items-center animate-fade-in">
       <div class="w-18 h-18 rounded-full bg-[#f7eeec] border-2 border-[#f16c90] flex items-center justify-center p-2 shadow-sm">
         <img class="w-14 h-14 object-contain" src="../../static/images/visuals/avatar/${randomIcon}.png" alt="avatar-icon" />
       </div>
@@ -45,5 +45,40 @@ export function createParticipantCard(roleText = 'guest', randomIcon) {
     </div>
   `.trim();
 
-  document.getElementById("participant-avatar").appendChild(template.content.firstElementChild);
+  document
+    .getElementById("participant-avatar")
+    .appendChild(template.content.firstElementChild);
+}
+
+export function buttonAssignments(role) {
+  const guestTemplate = document.createElement("template");
+  const hostTemplate = document.createElement("template");
+
+  guestTemplate.innerHTML = `
+    <div class="flex flex-col text-center justify-center items-center animate-grow cursor-not-allowed ">
+      <div class="rotating-border-container">
+        <p class="relative z-10 font-basic tracking-wider text-white text-md font-semibold px-12 py-3 bg-[#fab1c3] rounded-full">
+          Waiting for Host
+        </p>
+      </div>
+    </div>
+  `.trim();
+
+  hostTemplate.innerHTML = `
+    <div class="flex flex-col text-center justify-center items-center">
+      <button
+        id="startBtn"
+        class="primary-btn font-basic rounded-full tracking-wider px-12 py-3 text-md font-semibold animate-grow cursor-pointer">
+          Start Session
+      </button>
+    </div>
+  `.trim();
+
+  if (role === "host") {
+    roleBtnContainer.appendChild(hostTemplate.content.firstChild);
+  }
+
+  if (role === "guest") {
+    roleBtnContainer.appendChild(guestTemplate.content.firstChild);
+  }
 }

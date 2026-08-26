@@ -2,11 +2,12 @@ import {
   updateRoomId,
   updateParticipantCount,
   createParticipantCard,
+  buttonAssignments,
 } from "./lobby-main.js";
 import { getSocket, buildRoomUrl } from "../utils/socket.js";
 
-const test_button = document.getElementById("test-socket");
 const startBtn = document.getElementById("startBtn");
+const leaveRoomBtn = document.getElementById("leaveRoomBtn");
 
 const socket = getSocket();
 
@@ -20,36 +21,28 @@ if (socket) {
 
   // Socket Participant Entry Denied (Fabricated Id) or Disconnected
   socket.onclose = (event) => {
+    // const data =
+    console.log("close");
     console.log("Socket closed:", event.code);
   };
 
   socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
     console.log("Data Check:", data); // Data Check
+    updateParticipantCount(data.count);
 
     switch (data.type) {
-      case "participant_count":
-        updateParticipantCount(data.count);
-        break;
-
-      case "role":
-        if (data.role === "host") {
-          createParticipantCard('host', data.avatar);
-        } else {
-          createParticipantCard('guest', data.avatar);
-        }
+      case "participant_joined":
+        createParticipantCard(data.role, data.avatar, data.participantId);
+        buttonAssignments(data.role);
         break;
 
       case "start_session":
         window.location.href = buildRoomUrl("/session");
         break;
 
-      case "test":
-        console.log("Test message:", data.message);
-        break;
-
-      default:
-      console.log("Unknown message:", data);
+      // default:
+      //   console.log("Unknown message:", data);
     }
   };
 
@@ -75,21 +68,16 @@ startBtn?.addEventListener("click", () => {
   }
 });
 
-// =============================
-//   TEST BUTTON DELETE AFTER
-// =============================
-
-test_button?.addEventListener("click", () => {
+leaveRoomBtn?.addEventListener("click", () => {
   if (socket && socket.readyState === WebSocket.OPEN) {
     socket.send(
       JSON.stringify({
-        type: "test",
-        message: "Hello!",
+        type: "leave_session",
       }),
     );
+  } else {
+    console.warn("WebSocket is not connected yet.");
   }
-});
 
-// =============================
-//       UP TO THIS POINT
-// =============================
+  window.location.href = '/home' 
+});

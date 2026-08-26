@@ -23,7 +23,18 @@ class SessionManager :
                     return True
         return False
     
+    def display_data(self):
+        print(self.participants)
     
+    def remove_participant(self, participantId, room_code):
+        
+        if room_code not in self.participants:
+            print("Room Code not Exisitent")
+            return
+        
+        if participantId in self.participants[room_code]:
+            del self.participants[room_code][participantId]
+        
             
         
 # All classes that need Session Manager get data on this instance

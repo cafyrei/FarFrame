@@ -17,6 +17,7 @@ class ConnectionManager:
         participant_count = len(self.rooms[room_code])
 
         return participant_count
+
         
     def disconnect(self, websocket: WebSocket, room_code: str):
         if room_code in self.rooms:
