@@ -5,9 +5,9 @@ import {
   removeParticipantCard,
   buttonAssignments,
 } from "./lobby-main.js";
-import { getSocket, buildRoomUrl } from "../utils/socket.js";
+import { getSocket, buildRoomUrl, participantId } from "../utils/socket.js";
 
-const startBtn = document.getElementById("startBtn");
+const startBtnContainer = document.getElementById("role-container");
 const leaveRoomBtn = document.getElementById("leaveRoomBtn");
 
 const socket = getSocket();
@@ -33,9 +33,20 @@ if (socket) {
     switch (data.type) {
       case "participant_joined":
         createParticipantCard(data.role, data.avatar, data.participantId);
-        if (data.role === "host"){
-          buttonAssignments(data.role);
+        if (data.role === "host") {
+          buttonAssignments(data.role, data.participantId, participantId);
         }
+        break;
+
+      case "existing_participants":
+        data.participants.forEach((participant) => {
+          createParticipantCard(
+            participant.role,
+            participant.avatar,
+            participant.participantId,
+          );
+        });
+
         break;
         
       case "existing_participants":
@@ -66,15 +77,18 @@ if (socket) {
   );
 }
 
-startBtn?.addEventListener("click", () => {
-  if (socket && socket.readyState === WebSocket.OPEN) {
-    socket.send(
-      JSON.stringify({
-        type: "start_session",
-      }),
-    );
-  } else {
-    console.warn("WebSocket is not connected yet.");
+startBtnContainer.addEventListener("click", (event) => {
+
+  if (event.target.id === "startBtn") {
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      socket.send(
+        JSON.stringify({
+          type: "start_session",
+        }),
+      );
+    } else {
+      console.warn("WebSocket is not connected yet.");
+    }
   }
 });
 

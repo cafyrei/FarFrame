@@ -8,7 +8,7 @@ const number_of_participants = document.getElementById(
 const room_code = new URLSearchParams(window.location.search).get("room_code");
 
 export function updateRoomId() {
-    room_id.value = room_code;
+  room_id.value = room_code;
 }
 
 export function updateParticipantCount(newCount) {
@@ -20,7 +20,7 @@ const copyRoomBtn = document.getElementById("copy-room-id-button");
 
 // Containers
 
-const roleBtnContainer = document.getElementById("role-btn");
+const roleBtnContainer = document.getElementById("role-container");
 
 copyRoomBtn.addEventListener("click", async () => {
   try {
@@ -56,12 +56,14 @@ export function removeParticipantCard(particiapantId) {
   document.getElementById(particiapantId).remove();
 }
 
-export function buttonAssignments(role) {
-  const guestTemplate = document.createElement("template");
+export function buttonAssignments(role, joinedParticipant, myParticipantId) {
+
+  if(role !== 'host' || joinedParticipant !== myParticipantId) return;
+
   const hostTemplate = document.createElement("template");
 
   hostTemplate.innerHTML = `
-    <div class="flex flex-col text-center justify-center items-center">
+    <div id="start-btn" class="flex flex-col text-center justify-center items-center">
       <button
         id="startBtn"
         class="primary-btn font-basic rounded-full tracking-wider px-12 py-3 text-md font-semibold animate-grow cursor-pointer">
