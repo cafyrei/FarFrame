@@ -48,6 +48,13 @@ if (socket) {
         });
 
         break;
+        
+      case "existing_participants":
+        data.participants.forEach((participant) => {
+          createParticipantCard(participant.role, participant.avatar, participant.participantId);
+        });
+        
+        break;
 
       case "start_session":
         window.location.href = buildRoomUrl("/session");
@@ -71,11 +78,8 @@ if (socket) {
 }
 
 startBtnContainer.addEventListener("click", (event) => {
-  console.log(event.target);
-  console.log(event.target.id);
 
   if (event.target.id === "startBtn") {
-      console.log("inside");
     if (socket && socket.readyState === WebSocket.OPEN) {
       socket.send(
         JSON.stringify({
