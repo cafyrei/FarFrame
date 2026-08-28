@@ -1,5 +1,5 @@
 import { getSocket, participantId } from "../utils/socket.js";
-import { initLocalVideo, addParticipantVideo } from "./session-main.js";
+import { initLocalVideo, addParticipantVideo } from "./session-camera.js";
 
 const socket = getSocket();
 

@@ -1,4 +1,4 @@
-import { getSocket } from "../utils/socket.js";
+import { getSocket, participantId} from "../utils/socket.js";
 import {
   establishRTCOffer,
   handleOffer,
@@ -31,13 +31,10 @@ if (socket) {
 
     switch (data.type) {
       case "participant_joined":
-        if (data.role === 'host') {
+        if (data.role === 'host' && participantId === data.participantId) {
           isHost = true;
         } 
-        
         partipantCount = data.count;
-
-        console.log("Participant Count: " + partipantCount); 
 
         break;
       case "offer":
@@ -60,6 +57,9 @@ if (socket) {
     }
   };
 }
+
+
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // TEMPORARY BUTTON FOR DEBUGGING
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
