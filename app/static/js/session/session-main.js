@@ -1,10 +1,9 @@
 import { stopMedia, getLocalVideoElement } from "./session-camera.js";
 
-const muteBtn = document.getElementById("muteBtn");
+const refreshBtn = document.getElementById("refreshBtn");
 const mirrorBtn = document.getElementById("mirrorBtn");
 
-let mirrorFlag = false;
-let side = null;
+let isMirrored = false;
 
 export const mediaStream = null;
 
@@ -13,13 +12,21 @@ muteBtn?.addEventListener("click", () => {
 });
 
 mirrorBtn?.addEventListener("click", () => {
-  mirrorFlag = !mirrorFlag;
-  side = mirrorFlag ? "right" : "left";
-  
-  mirrorCamera(side);
+  isMirrored = !isMirrored;
+
+  mirrorCamera();
 });
 
-function mirrorCamera(side) {
+
+refreshBtn.addEventListener("click", () => {
+  const refreshImg = refreshBtn.querySelector('img');
+  refreshImg.classList.toggle('rotate-180');
+
+  
+});
+
+
+function mirrorCamera() {
   const localVideo = getLocalVideoElement();
 
   if (!localVideo) {
@@ -27,15 +34,20 @@ function mirrorCamera(side) {
     return;
   }
 
-  const invertedMirrorBtn = document.createElement("template");
+  localVideo.style.transform = isMirrored
+    ? "scaleX(-1)"
+    : "scaleX(1)";
 
-  invertedMirrorBtn.innerHTML = `
-    <img class="w-5 h-5 invert object-contain brightness-0" src="../../static/images/icons/mirror-${side}.svg"/>
+  const side = isMirrored ? "right" : "left";
+
+  const template = document.createElement("template");
+
+  template.innerHTML = `
+    <img
+      class="w-5 h-5 invert object-contain brightness-0"
+      src="../../static/images/icons/mirror-${side}.svg"
+    />
   `.trim();
 
-  mirrorBtn.replaceChildren(invertedMirrorBtn.content.firstChild);
-
-  if (localVideo.id) {
-    localVideo.style.transform = mirrorFlag ? "scaleX(-1)" : "scaleX(1)";
-  }
+  mirrorBtn.replaceChildren(template.content.firstElementChild);
 }

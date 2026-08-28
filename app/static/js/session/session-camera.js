@@ -93,7 +93,7 @@ export function addParticipantVideo(videoParticipantId, stream) {
   videoElement.autoplay = true;
   videoElement.playsInline = true;
   videoElement.srcObject = stream;
-  videoElement.className = 'absolute inset-0 w-full h-full object-cover';
+  videoElement.className = 'absolute inset-0 w-full h-full object-cover rounded-2xl';
 
   const videoCount = videoGrid.querySelectorAll('video').length;
 
@@ -108,7 +108,7 @@ export function addParticipantVideo(videoParticipantId, stream) {
 }
 
 export function getLocalVideoElement() {
-  
+
   return document.getElementById(`video-${participantId}`);
 }
 

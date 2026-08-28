@@ -50,30 +50,51 @@
 
     <main class="camera-control flex flex-col gap-2 justify-center text-center">
       <div class="webcam-container flex flex-col gap-4">
-        <div id="camera-selector" class="flex flex-row gap-2 text-center justify-center">
-          <button id="mirrorBtn" class="primary-btn">
-            <img
-            class="w-5 h-5 invert object-contain brightness-0"
-            src="../../static/images/icons/mirror-right.svg"
-          />
-          </button>
+        <div
+          id="camera-selector"
+          class="flex flex-row gap-2 text-center justify-center"
+        >
           <div class="list-wrapper relative group">
             <select
               id="cameraList"
               class="bg-[#ff648d] hover:bg-[#fab1c3] cursor-pointer appearance-none rounded-full text-white font-basic pl-6 pr-9 p-2 align-center text-center"
             ></select>
             <img
-              class=" invert pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 transition-transform group-focus-within:rotate-180"
-              src="../../static/images/icons/dropdown-arrow.svg"
+              class="invert pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 transition-transform group-focus-within:rotate-180"
+              src="/static/images/icons/dropdown-arrow.svg"
             />
           </div>
-          <button id="refreshCamera" class="primary-btn p-2 px-4">
-            Refresh
+          <button id="refreshBtn" class="primary-btn p-2 px-4">
+            <img
+              src="/static/images/icons/refresh.svg"
+              class="w-5 h-5 invert transition-transform duration-500 ease-in-out"
+              alt="refresh"
+            />
+          </button>
+          <button id="mirrorBtn" class="primary-btn">
+            <img
+              class="w-5 h-5 invert object-contain brightness-0"
+              src="/static/images/icons/mirror-right.svg"
+            />
           </button>
         </div>
-  
-        <div id="video-grid" class="relative mx-auto w-[900px] h-[500px]"></div>
-  
+
+        <div
+          id="video-grid"
+          class="shadow relative mx-auto w-[900px] h-[500px]"
+        ></div>
+
+        <p
+          class="relative font-basi inline-flex items-center justify-center gap-2 px-9 py-1 mx-auto rounded-full bg-amber-100 text-amber-900 text-sm shadow-sm border border-amber-200"
+        >
+          <img
+            src="/static/images/icons/heart.svg"
+            class="w-3 h-3 absolute left-3"
+            alt="heart icon"
+          />
+          Tip: Look at the camera and smile!
+        </p>
+
         <div class="camera-controls">
           <button class="primary-btn" id="cameraBtn">Capture</button>
           <button class="primary-btn" id="muteBtn">Mic</button>
