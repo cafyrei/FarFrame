@@ -4,21 +4,76 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="/static/favicon.ico" type="image/x-icon" />
-    <title>Room</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <title>FarFrame | Session</title>
   </head>
-  <body>
-    <div class="webcam-container">
-      <div class="video-grid">
-
+  <body class="bg-[#faf2eb]">
+    <nav
+      class="flex flex-col gap-4 m-6 md:flex-row md:items-center md:justify-between"
+    >
+      <div class="flex flex-row items-center gap-3">
+        <img
+          class="w-12 h-12 shrink-0"
+          src="/static/images/visuals/heart.png"
+          alt="FarFrame Heart Logo"
+        />
+        <div>
+          <h1 class="text-white text-5xl md:text-6xl font-marck drop-shadow-md">
+            <span class="text-[#f16c90]">Far</span>Frame
+          </h1>
+          <p
+            class="text-gray-700 font-medium text-base md:text-lg font-basic drop-shadow-md"
+          >
+            <span class="text-[#f36c90]">Capture the moment,</span> even from
+            miles apart.
+          </p>
+        </div>
       </div>
 
-      <div class="camera-controls">
-        <button class="button" id="cameraBtn">Capture</button>
-        <button class="button" id="muteBtn">Mic</button>
-      </div>
-    </div>
+      <button
+        id="leaveRoomBtn"
+        class="mr-6 flex items-center justify-center bg-[#fbece8] hover:bg-[#ffd6cb] p-3 font-basic cursor-pointer transition-colors"
+        title="Exit Lobby"
+        aria-label="Exit Lobby"
+      >
+        <img
+          class="w-6 h-6 object-contain"
+          src="/static/images/icons/exit.svg"
+          style="
+            filter: invert(68%) sepia(21%) saturate(1313%) hue-rotate(300deg)
+              brightness(97%) contrast(89%);
+          "
+          alt=""
+        />
+      </button>
+    </nav>
 
-    <button class="button" id="testBtn">Send a Message</button>
+    <main class="camera-control flex flex-col gap-2 justify-center text-center">
+      <div class="webcam-container flex flex-col gap-4">
+        <div id="camera-selector" class="flex flex-row gap-2 text-center justify-center">
+          <div class="list-wrapper relative group">
+            <select
+              id="cameraList"
+              class="bg-[#fab1c3] hover:bg-[#fa4475] cursor-pointer appearance-none rounded-full text-white font-basic pl-6 pr-9 p-2 align-center text-center"
+            ></select>
+            <img
+              class=" invert pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 transition-transform group-focus-within:rotate-180"
+              src="../../static/images/icons/dropdown-arrow.svg"
+            />
+          </div>
+          <button id="refreshCamera" class="primary-btn p-2 px-4">
+            Refresh
+          </button>
+        </div>
+  
+        <div id="video-grid" class="max-w-186 flex flex-row mx-auto text-center justify-center"></div>
+  
+        <div class="camera-controls">
+          <button class="primary-btn" id="cameraBtn">Capture</button>
+          <button class="primary-btn" id="muteBtn">Mic</button>
+        </div>
+      </div>
+    </main>
 
     <script type="module" src="/static/js/session/session-main.js"></script>
     <script type="module" src="/static/js/session/session-socket.js"></script>

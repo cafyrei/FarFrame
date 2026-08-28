@@ -13,7 +13,7 @@ const socket = getSocket();
 const testBtn = document.getElementById("testBtn");
 
 let isHost = false;
-let partipantCount = 0;
+let partipantCount = null;
 let offeredStarted = false;
 
 if (socket) {
@@ -30,13 +30,15 @@ if (socket) {
     console.log("Data: ", data); // Data Check
 
     switch (data.type) {
-      case "role":
-        if (data.role === "host") {
+      case "participant_joined":
+        if (data.role === 'host') {
           isHost = true;
-        }
-        break;
-      case "participant_count":
+        } 
+        
         partipantCount = data.count;
+
+        console.log("Participant Count: " + partipantCount); 
+
         break;
       case "offer":
         handleOffer(data.offer, data.participantId);
@@ -58,21 +60,20 @@ if (socket) {
     }
   };
 }
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // TEMPORARY BUTTON FOR DEBUGGING
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-testBtn.addEventListener("click", () => {
-  if (socket && socket.readyState === WebSocket.OPEN) {
-    socket.send(
-      JSON.stringify({
-        type: "test",
-        message: "Hello!",
-      }),
-    );
-  }
-});
+// testBtn.addEventListener("click", () => {
+//   if (socket && socket.readyState === WebSocket.OPEN) {
+//     socket.send(
+//       JSON.stringify({
+//         type: "test",
+//         message: "Hello!",
+//       }),
+//     );
+//   }
+// });
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // TO HERE

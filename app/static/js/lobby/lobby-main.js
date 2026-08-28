@@ -66,7 +66,7 @@ export function buttonAssignments(role, joinedParticipant, myParticipantId) {
     <div id="start-btn" class="flex flex-col text-center justify-center items-center">
       <button
         id="startBtn"
-        class="primary-btn font-basic rounded-full tracking-wider px-12 py-3 text-md font-semibold animate-grow cursor-pointer">
+        class="primary-btn font-basic tracking-wider px-12 py-3 text-md font-semibold animate-grow cursor-pointer">
           Start Session
       </button>
     </div>

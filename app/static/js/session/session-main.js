@@ -1,4 +1,4 @@
-import {participantId } from "../utils/socket.js";
+import { participantId } from "../utils/socket.js";
 
 const videoGrid =
   document.querySelector(".video-grid") ||
@@ -15,16 +15,6 @@ muteBtn.addEventListener("click", () => {
   stopMedia();
   console.log("end");
 });
-
-function updateParticipants(event) {
-  const data = JSON.parse(event.data);
-
-  let participant_count = null;
-
-  if (data.type === "participant_count") {
-    participant_count = data.count;
-  }
-}
 
 export function addParticipantVideo(participantId, stream) {
   if (document.getElementById(`video-${participantId}`)) return;
@@ -75,7 +65,6 @@ async function startMedia() {
   }
 }
 
-
 function stopMedia() {
   if (mediaStream) {
     mediaStream.getTracks().forEach((track) => track.stop());
@@ -89,3 +78,55 @@ function stopMedia() {
     muteBtn.disabled = false;
   }
 }
+
+async function getCameras() {
+  try {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    return devices;
+  } catch (error) {
+    console.error("Error enumerating devices:", error);
+    throw error; // Re-throw to handle upstream
+  }
+}
+
+async function getVideoCameras(){
+  const allDevices = await getCameras();
+  
+  const cameras = allDevices.filter(device => device.kind === "videoinput");
+  return cameras;
+}
+
+async function populateCameraList(){
+  const cameraList = document.getElementById('cameraList');
+  const cameras = await getVideoCameras();
+
+  cameraList.innerHTML = '';
+  
+  if(cameras.length === 0) {
+    const option = document.createElement('option');
+    option.textContent = "No Cameras Detected";
+    option.disabled = true;
+    cameraList.appendChild(option);
+    return;
+  }
+
+  cameras.forEach(camera => {
+    const option = document.createElement('option');
+    option.value = camera.deviceId;
+    option.className = 'option-default';
+
+    option.textContent = camera.label || `Camera ${cameraList.options.length + 1}`;
+    cameraList.appendChild(option);
+  });
+}
+
+// CHECK IF THE USERS BROWSER SUPPORT CAMERA DETECTION
+if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+  alert(
+    "This browser does not support camera detection. Please use a modern browser like Chrome, Firefox, or Edge.",
+  );
+} else {
+  console.log("MediaDevices API is supported!");
+}
+
+populateCameraList();

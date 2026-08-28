@@ -90,6 +90,10 @@
   }
 
   .primary-btn {
-    @apply bg-[#E48CA3] hover:bg-[#fa4475] text-white font-medium cursor-pointer px-5 py-2.5 rounded-lg transition-colors;
+    @apply bg-[#E48CA3] hover:bg-[#fa4475] text-white font-medium cursor-pointer px-5 py-2.5 rounded-full transition-colors font-basic;
+  }
+
+  .option-default {
+    @apply bg-white text-black mr-2;
   }
 }
