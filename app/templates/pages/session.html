@@ -32,7 +32,7 @@
 
       <button
         id="leaveRoomBtn"
-        class="mr-6 flex items-center justify-center bg-[#fbece8] hover:bg-[#ffd6cb] p-3 font-basic cursor-pointer transition-colors"
+        class="mr-6 flex items-center justify-center rounded-full bg-[#fbece8] hover:bg-[#ffd6cb] p-3 font-basic cursor-pointer transition-colors"
         title="Exit Lobby"
         aria-label="Exit Lobby"
       >
@@ -51,10 +51,16 @@
     <main class="camera-control flex flex-col gap-2 justify-center text-center">
       <div class="webcam-container flex flex-col gap-4">
         <div id="camera-selector" class="flex flex-row gap-2 text-center justify-center">
+          <button id="mirrorBtn" class="primary-btn">
+            <img
+            class="w-5 h-5 invert object-contain brightness-0"
+            src="../../static/images/icons/mirror-right.svg"
+          />
+          </button>
           <div class="list-wrapper relative group">
             <select
               id="cameraList"
-              class="bg-[#fab1c3] hover:bg-[#fa4475] cursor-pointer appearance-none rounded-full text-white font-basic pl-6 pr-9 p-2 align-center text-center"
+              class="bg-[#ff648d] hover:bg-[#fab1c3] cursor-pointer appearance-none rounded-full text-white font-basic pl-6 pr-9 p-2 align-center text-center"
             ></select>
             <img
               class=" invert pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 transition-transform group-focus-within:rotate-180"
@@ -66,7 +72,7 @@
           </button>
         </div>
   
-        <div id="video-grid" class="max-w-186 flex flex-row mx-auto text-center justify-center"></div>
+        <div id="video-grid" class="relative mx-auto w-[900px] h-[500px]"></div>
   
         <div class="camera-controls">
           <button class="primary-btn" id="cameraBtn">Capture</button>

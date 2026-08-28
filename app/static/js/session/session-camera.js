@@ -8,6 +8,7 @@ const videoGrid =
   document.querySelector(".video-grid") ||
   document.getElementById("video-grid");
 
+
 const cameraList = document.getElementById("cameraList");
 
 // ==================================================
@@ -92,6 +93,11 @@ export function addParticipantVideo(videoParticipantId, stream) {
   videoElement.autoplay = true;
   videoElement.playsInline = true;
   videoElement.srcObject = stream;
+  videoElement.className = 'absolute inset-0 w-full h-full object-cover';
+
+  const videoCount = videoGrid.querySelectorAll('video').length;
+
+  videoElement.style.zIndex = videoCount + 1;
 
   // Don't play our own microphone back to us
   if (videoParticipantId === participantId) {
@@ -99,6 +105,11 @@ export function addParticipantVideo(videoParticipantId, stream) {
   }
 
   videoGrid.appendChild(videoElement);
+}
+
+export function getLocalVideoElement() {
+  
+  return document.getElementById(`video-${participantId}`);
 }
 
 // ==================================================
