@@ -52,10 +52,6 @@ if (socket) {
       case "mirror_changed":
         setParticipantMirror(data.participantId, data.mirrored);
         break;
-      case "camera_changed":
-        startStream(data.participantId, data.cameraId);
-        break;
-
     }
 
     // This Establish(starts) the handshake
@@ -81,21 +77,6 @@ export function sendMirrorState(isMirrored) {
     }),
   );
 }
-
-export function sendCameraChangeState(cameraId) {
-  if(socket?.readyState !== WebSocket.OPEN) return;
-  
-  socket.send(
-    JSON.stringify({
-      type: "camera_changed",
-      participantId,
-      cameraId: cameraId,
-    }),
-  );
-}
-
-
-
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // TEMPORARY BUTTON FOR DEBUGGING

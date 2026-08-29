@@ -1,4 +1,7 @@
 import { participantId } from "../utils/socket.js";
+import {
+  replaceVideoTrack, 
+} from "./session-rtc.js";
 
 // ==================================================
 // DOM Elements
@@ -178,26 +181,41 @@ export async function populateCameraList() {
   });
 }
 
-export async function startStream(participantId, cameraDeviceId) {
-  const videoElement = document.getElementById(`video-${participantId}`);
-  
+export async function startStream(cameraDeviceId) {
+  const videoElement = getLocalVideoElement();
+
   if (!videoElement) {
-    console.error("Local video element not found!");
+    console.error("Local video element not found.");
     return;
   }
-  
+
   const constraints = {
-    video: { deviceId: { exact: cameraDeviceId } },
+    video: {
+      deviceId: { exact: cameraDeviceId },
+    },
     audio: false,
-  }
+  };
 
   try {
-    if (videoElement.srcObject) {
-      videoElement.srcObject.getTracks().forEach((track) => track.stop());
-    }
+    const oldStream = videoElement.srcObject;
 
-    const stream = await navigator.mediaDevices.getUserMedia(constraints);      
-    videoElement.srcObject = stream; 
+    const newStream =
+      await navigator.mediaDevices.getUserMedia(constraints);
+
+    const newVideoTrack = newStream.getVideoTracks()[0];
+
+    // Change what the remote participant receives
+    await replaceVideoTrack(newVideoTrack);
+
+    // Change local preview
+    videoElement.srcObject = newStream;
+
+    // Stop the OLD camera after replacement
+    if (oldStream) {
+      oldStream.getVideoTracks().forEach((track) => {
+        track.stop();
+      });
+    }
   } catch (error) {
     console.error("Stream error:", error);
     alert(`Failed to start camera: ${error.message}`);

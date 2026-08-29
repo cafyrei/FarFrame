@@ -142,3 +142,18 @@ async function queueOfCandidates() {
     await peerConnection.addIceCandidate(candidate);
   }
 }
+
+
+export async function replaceVideoTrack(newTrack) {
+  const videoSender = peerConnection
+    .getSenders()
+    .find((sender) => sender.track?.kind === "video");
+
+  if (!videoSender) {
+    console.warn("No video sender found.");
+    return;
+  }
+
+  await videoSender.replaceTrack(newTrack);
+
+}

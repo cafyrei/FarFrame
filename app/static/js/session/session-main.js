@@ -5,7 +5,6 @@ import {
 } from "./session-camera.js";
 import {
   sendMirrorState, 
-  sendCameraChangeState,
 } from "./session-socket.js";
 import { participantId } from "../utils/socket.js";
 
@@ -70,7 +69,7 @@ refreshBtn.addEventListener("click", async () => {
   cameraList.disabled = false;
 
   if (cameraList.options.length > 0 && cameraList.options[0].value) {
-    startStream(participantId, cameraList.value);
+    startStream(cameraList.value);
   }
 
   const refreshImg = refreshBtn.querySelector("img");
@@ -78,7 +77,5 @@ refreshBtn.addEventListener("click", async () => {
 });
 
 cameraList.addEventListener("change", () => {
-  startStream(participantId, cameraList.value);
-
-  sendCameraChangeState(cameraList.value);
+  startStream(cameraList.value);
 });
