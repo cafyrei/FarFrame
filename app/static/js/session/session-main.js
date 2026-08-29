@@ -1,14 +1,30 @@
 import { stopMedia, getLocalVideoElement } from "./session-camera.js";
 
+
+// DOM INITIALIZATION
+
 const refreshBtn = document.getElementById("refreshBtn");
 const mirrorBtn = document.getElementById("mirrorBtn");
+const muteBtn = document.getElementById("muteBtn");
+
+// TOGGLE CONTROL DECLARATION
 
 let isMirrored = false;
-
-export const mediaStream = null;
+let isMuted = false;
 
 muteBtn?.addEventListener("click", () => {
-  stopMedia();
+  isMuted = !isMuted;
+
+  // Icons and Labels
+  const icon = isMuted ? "/static/images/icons/mute.svg" : "/static/images/icons/unmute.svg";
+  const label = isMuted ? "Unmute" : "Mute";
+
+  // Update inner DOM elements safely
+  muteBtn.querySelector("p").textContent = label;
+  
+  const iconDiv = muteBtn.querySelector("div");
+  iconDiv.style.maskImage = `url('${icon}')`;
+  iconDiv.style.webkitMaskImage = `url('${icon}')`;
 });
 
 mirrorBtn?.addEventListener("click", () => {
@@ -17,14 +33,10 @@ mirrorBtn?.addEventListener("click", () => {
   mirrorCamera();
 });
 
-
 refreshBtn.addEventListener("click", () => {
-  const refreshImg = refreshBtn.querySelector('img');
-  refreshImg.classList.toggle('rotate-180');
-
-  
+  const refreshImg = refreshBtn.querySelector("img");
+  refreshImg.classList.toggle("rotate-180");
 });
-
 
 function mirrorCamera() {
   const localVideo = getLocalVideoElement();
@@ -34,9 +46,7 @@ function mirrorCamera() {
     return;
   }
 
-  localVideo.style.transform = isMirrored
-    ? "scaleX(-1)"
-    : "scaleX(1)";
+  localVideo.style.transform = isMirrored ? "scaleX(-1)" : "scaleX(1)";
 
   const side = isMirrored ? "right" : "left";
 

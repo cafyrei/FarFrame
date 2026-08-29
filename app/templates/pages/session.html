@@ -99,13 +99,17 @@
           class="relative mx-auto w-[900px] h-[500px] bg-[#faf2eb]"
         ></div>
 
-        <div class="bg-[#faf1ea] border border-dashed shadow p-4 py-1 gap-3 text-sm border-[#ff8fad] justify-center items-center rounded-full flex flex-row max-w-67 mx-auto">
+        <div
+          class="bg-[#faf1ea] animate-grow border border-dashed shadow p-4 py-1 gap-3 text-sm border-[#ff8fad] justify-center items-center rounded-full flex flex-row max-w-67 mx-auto"
+        >
           <img
             src="/static/images/icons/heart.svg"
             class="w-3 h-3"
             alt="heart icon"
           />
-          <p class="font-basic text-black/30">Tip: Look at the camera and smile!</p>
+          <p class="font-basic text-black/30">
+            Tip: Look at the camera and smile!
+          </p>
         </div>
 
         <div
@@ -125,7 +129,9 @@
             class="primary-btn shadow px-6 flex flex-row gap-1 items-center text-[#b8824f] bg-[#ffe8d3] border border-[#f898b1]"
             id="muteBtn"
           >
-            <img class="w-4 h-4 invert" src="/static/images/icons/unmute.svg" />
+            <div
+              class="w-4 h-4 bg-[#b8824f] [mask-image:url('/static/images/icons/unmute.svg')] [mask-size:contain] [mask-repeat:no-repeat] [mask-position:center]"
+            ></div>
             <p>Mute</p>
           </button>
         </div>

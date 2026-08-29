@@ -394,6 +394,9 @@
   .ml-4 {
     margin-left: calc(var(--spacing) * 4);
   }
+  .block {
+    display: block;
+  }
   .flex {
     display: flex;
   }
@@ -750,6 +753,9 @@
   .bg-\[\#E48CA3\]\/40 {
     background-color: color-mix(in oklab, #E48CA3 40%, transparent);
   }
+  .bg-\[\#b8824f\] {
+    background-color: #b8824f;
+  }
   .bg-\[\#d3a983\] {
     background-color: #d3a983;
   }
@@ -809,6 +815,21 @@
   }
   .bg-white {
     background-color: var(--color-white);
+  }
+  .\[mask-image\:url\(\'\/static\/images\/icons\/unmute\.svg\'\)\] {
+    mask-image: url('/static/images/icons/unmute.svg');
+  }
+  .\[mask-size\:contain\] {
+    mask-size: contain;
+  }
+  .\[mask-position\:center\] {
+    mask-position: center;
+  }
+  .\[mask-repeat\:no-repeat\] {
+    mask-repeat: no-repeat;
+  }
+  .mask-repeat {
+    mask-repeat: repeat;
   }
   .object-contain {
     object-fit: contain;

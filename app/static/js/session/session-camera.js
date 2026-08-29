@@ -48,6 +48,11 @@ async function startMedia() {
   }
 }
 
+
+// NOTE: THIS FUNCTION IS NOT USED AND NOT DELETED FOR FUTURE UPDATE
+//       IF TIME COMES WE INCLUDE ABILITY TO TURN OFF CAMERA FOR PARTICIPANTS
+//       AGAIN NOTE !!!! NOT REFERENCED TO ANY FILES!!!!
+
 export function stopMedia() {
   if (!mediaStream) return;
 
