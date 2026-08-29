@@ -1,5 +1,9 @@
-import { getLocalVideoElement } from "./session-camera.js";
-import { sendMirrorState } from "./session-socket.js";
+import {
+  getLocalVideoElement,
+  setParticipantMirror,
+} from "./session-camera.js";
+import { sendMirrorState} from "./session-socket.js";
+import { participantId } from "../utils/socket.js";
 
 
 // DOM INITIALIZATION
@@ -17,12 +21,14 @@ muteBtn?.addEventListener("click", () => {
   isMuted = !isMuted;
 
   // Icons and Labels
-  const icon = isMuted ? "/static/images/icons/mute.svg" : "/static/images/icons/unmute.svg";
+  const icon = isMuted
+    ? "/static/images/icons/mute.svg"
+    : "/static/images/icons/unmute.svg";
   const label = isMuted ? "Unmute" : "Mute";
 
   // Update inner DOM elements safely
   muteBtn.querySelector("p").textContent = label;
-  
+
   const iconDiv = muteBtn.querySelector("div");
   iconDiv.style.maskImage = `url('${icon}')`;
   iconDiv.style.webkitMaskImage = `url('${icon}')`;
@@ -30,28 +36,13 @@ muteBtn?.addEventListener("click", () => {
 
 mirrorBtn?.addEventListener("click", () => {
   isMirrored = !isMirrored;
-
-  mirrorCamera();
-
+  
+  // CHANGE OWN CAMERA
+  setParticipantMirror(participantId, isMirrored);
+  
+  // SEND THE MESSAGE TO REMOTE
   sendMirrorState(isMirrored);
-});
-
-refreshBtn.addEventListener("click", () => {
-  const refreshImg = refreshBtn.querySelector("img");
-  refreshImg.classList.toggle("rotate-180");
-});
-
-
-function mirrorCamera() {
-  const localVideo = getLocalVideoElement();
-
-  if (!localVideo) {
-    console.warn("Local video not available.");
-    return;
-  }
-
-  localVideo.style.transform = isMirrored ? "scaleX(-1)" : "scaleX(1)";
-
+  
   // ONLY CHANGE THE ICON INSIDE THE BUTTON OF MIRROR
   const side = isMirrored ? "right" : "left";
   const template = document.createElement("template");
@@ -64,4 +55,9 @@ function mirrorCamera() {
   `.trim();
 
   mirrorBtn.replaceChildren(template.content.firstElementChild);
-}
+});
+
+refreshBtn.addEventListener("click", () => {
+  const refreshImg = refreshBtn.querySelector("img");
+  refreshImg.classList.toggle("rotate-180");
+});
