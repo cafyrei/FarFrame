@@ -69,14 +69,16 @@
           id="camera-selector"
           class="flex flex-row gap-2 text-center justify-center"
         >
-          <div class="list-wrapper relative group">
+          <div class="list-wrapper relative group inline-block">
             <select
               id="cameraList"
-              class="bg-[#ff648d] hover:bg-[#fd4a77] cursor-pointer appearance-none rounded-full text-white font-basic pl-6 pr-9 p-2 align-center text-center"
+              class="bg-[#ff648d] hover:bg-[#fd4a77] cursor-pointer appearance-none rounded-full text-white font-basic pl-8 pr-10 py-2 text-center focus:outline-none transition-colors"
             ></select>
+
             <img
-              class="invert pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 transition-transform group-focus-within:rotate-180"
+              class="invert pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 transition-transform duration-200 group-focus-within:rotate-180"
               src="/static/images/icons/dropdown-arrow.svg"
+              alt="Dropdown arrow"
             />
           </div>
           <button id="refreshBtn" class="primary-btn p-1 px-2.5">

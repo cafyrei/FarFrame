@@ -58,7 +58,7 @@ export async function handleCandidate(candidate) {
  * Captures local media tracks, attaches them to the peer connection,
  * creates an SDP offer, sets it locally, and transmits it via WebSocket.
  */
-export async function establishRTCOffer() {
+export async function establishRTCOffer(role) {
     const localStream = await initLocalVideo();
     const tracks = localStream.getTracks();
 
@@ -75,6 +75,7 @@ export async function establishRTCOffer() {
         type: "offer",
         offer: offer,
         participantId: participantId,
+        role: role,
       }),
     );
 }
@@ -86,7 +87,7 @@ export async function establishRTCOffer() {
  *
  * @param {RTCSessionDescriptionInit} offer - The SDP offer received from the caller.
  */
-export async function handleOffer(offer, senderParticipantId) {
+export async function handleOffer(offer, senderParticipantId, role) {
   if (peerConnection) {
     const localStream = await initLocalVideo();
     const tracks = localStream.getTracks();
@@ -107,6 +108,7 @@ export async function handleOffer(offer, senderParticipantId) {
         type: "answer",
         answer: answer,
         participantId: participantId,
+        role: role,
       }),
     );
 

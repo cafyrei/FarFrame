@@ -1,5 +1,5 @@
 import { getSocket, participantId} from "../utils/socket.js";
-import { setParticipantMirror } from "./session-camera.js";
+import { setParticipantMirror, startStream } from "./session-camera.js";
 import {
   establishRTCOffer,
   handleOffer,
@@ -39,7 +39,7 @@ if (socket) {
 
       // RTC COMMUNICATION CASES
       case "offer":
-        handleOffer(data.offer, data.participantId);
+        handleOffer(data.offer, data.participantId, data.role);
         break;
       case "answer":
         handleAnswer(data.answer, data.participantId);
@@ -51,13 +51,18 @@ if (socket) {
       // SESSION EVENT CASES
       case "mirror_changed":
         setParticipantMirror(data.participantId, data.mirrored);
+        break;
+      case "camera_changed":
+        startStream(data.participantId, data.cameraId);
+        break;
+
     }
 
     // This Establish(starts) the handshake
     if (!offeredStarted) {
       if (isHost && partipantCount === 2) {
         offeredStarted = true;
-        establishRTCOffer();
+        establishRTCOffer(data.role);
       }
     }
   };
@@ -76,6 +81,19 @@ export function sendMirrorState(isMirrored) {
     }),
   );
 }
+
+export function sendCameraChangeState(cameraId) {
+  if(socket?.readyState !== WebSocket.OPEN) return;
+  
+  socket.send(
+    JSON.stringify({
+      type: "camera_changed",
+      participantId,
+      cameraId: cameraId,
+    }),
+  );
+}
+
 
 
 

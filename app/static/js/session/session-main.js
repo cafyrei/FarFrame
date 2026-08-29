@@ -1,8 +1,12 @@
 import {
-  getLocalVideoElement,
+  populateCameraList,
   setParticipantMirror,
+  startStream
 } from "./session-camera.js";
-import { sendMirrorState} from "./session-socket.js";
+import {
+  sendMirrorState, 
+  sendCameraChangeState,
+} from "./session-socket.js";
 import { participantId } from "../utils/socket.js";
 
 
@@ -11,6 +15,7 @@ import { participantId } from "../utils/socket.js";
 const refreshBtn = document.getElementById("refreshBtn");
 const mirrorBtn = document.getElementById("mirrorBtn");
 const muteBtn = document.getElementById("muteBtn");
+const cameraList = document.getElementById("cameraList");
 
 // TOGGLE CONTROL DECLARATION
 
@@ -57,7 +62,23 @@ mirrorBtn?.addEventListener("click", () => {
   mirrorBtn.replaceChildren(template.content.firstElementChild);
 });
 
-refreshBtn.addEventListener("click", () => {
+// REFRESH CAMERA LIST (DETECT NEW CAMERAS CONNECTED TO THE COMPUTER)
+refreshBtn.addEventListener("click", async () => {
+  
+  await populateCameraList();
+
+  cameraList.disabled = false;
+
+  if (cameraList.options.length > 0 && cameraList.options[0].value) {
+    startStream(participantId, cameraList.value);
+  }
+
   const refreshImg = refreshBtn.querySelector("img");
   refreshImg.classList.toggle("rotate-180");
+});
+
+cameraList.addEventListener("change", () => {
+  startStream(participantId, cameraList.value);
+
+  sendCameraChangeState(cameraList.value);
 });

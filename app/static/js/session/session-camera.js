@@ -48,7 +48,6 @@ async function startMedia() {
 }
 
 export function setParticipantMirror(participantId, isMirrored) {
-
   const video = document.getElementById(`video-${participantId}`);
 
   if (!video) {
@@ -153,7 +152,7 @@ async function getVideoCameras() {
   return allDevices.filter((device) => device.kind === "videoinput");
 }
 
-async function populateCameraList() {
+export async function populateCameraList() {
   const cameras = await getVideoCameras();
 
   cameraList.innerHTML = "";
@@ -177,6 +176,32 @@ async function populateCameraList() {
 
     cameraList.appendChild(option);
   });
+}
+
+export async function startStream(participantId, cameraDeviceId) {
+  const videoElement = document.getElementById(`video-${participantId}`);
+  
+  if (!videoElement) {
+    console.error("Local video element not found!");
+    return;
+  }
+  
+  const constraints = {
+    video: { deviceId: { exact: cameraDeviceId } },
+    audio: false,
+  }
+
+  try {
+    if (videoElement.srcObject) {
+      videoElement.srcObject.getTracks().forEach((track) => track.stop());
+    }
+
+    const stream = await navigator.mediaDevices.getUserMedia(constraints);      
+    videoElement.srcObject = stream; 
+  } catch (error) {
+    console.error("Stream error:", error);
+    alert(`Failed to start camera: ${error.message}`);
+  }
 }
 
 // ==================================================
