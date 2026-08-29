@@ -1,4 +1,5 @@
-import { stopMedia, getLocalVideoElement } from "./session-camera.js";
+import { getLocalVideoElement } from "./session-camera.js";
+import { sendMirrorState } from "./session-socket.js";
 
 
 // DOM INITIALIZATION
@@ -31,12 +32,15 @@ mirrorBtn?.addEventListener("click", () => {
   isMirrored = !isMirrored;
 
   mirrorCamera();
+
+  sendMirrorState(isMirrored);
 });
 
 refreshBtn.addEventListener("click", () => {
   const refreshImg = refreshBtn.querySelector("img");
   refreshImg.classList.toggle("rotate-180");
 });
+
 
 function mirrorCamera() {
   const localVideo = getLocalVideoElement();
@@ -48,8 +52,8 @@ function mirrorCamera() {
 
   localVideo.style.transform = isMirrored ? "scaleX(-1)" : "scaleX(1)";
 
+  // ONLY CHANGE THE ICON INSIDE THE BUTTON OF MIRROR
   const side = isMirrored ? "right" : "left";
-
   const template = document.createElement("template");
 
   template.innerHTML = `

@@ -8,7 +8,6 @@ const videoGrid =
   document.querySelector(".video-grid") ||
   document.getElementById("video-grid");
 
-
 const cameraList = document.getElementById("cameraList");
 
 // ==================================================
@@ -48,6 +47,17 @@ async function startMedia() {
   }
 }
 
+export function setParticipantMirror(participantId, isMirrored) {
+
+  const video = document.getElementById(`video-${participantId}`);
+
+  if (!video) {
+    console.warn("Local video not available.");
+    return;
+  }
+
+  video.style.transform = isMirrored ? "scaleX(-1)" : "scaleX(1)";
+}
 
 // NOTE: THIS FUNCTION IS NOT USED AND NOT DELETED FOR FUTURE UPDATE
 //       IF TIME COMES WE INCLUDE ABILITY TO TURN OFF CAMERA FOR PARTICIPANTS
@@ -60,9 +70,7 @@ export function stopMedia() {
     track.stop();
   });
 
-  const localVideo = document.getElementById(
-    `video-${participantId}`,
-  );
+  const localVideo = document.getElementById(`video-${participantId}`);
 
   if (localVideo) {
     localVideo.srcObject = null;
@@ -98,11 +106,7 @@ export function addParticipantVideo(videoParticipantId, stream) {
   videoElement.autoplay = true;
   videoElement.playsInline = true;
   videoElement.srcObject = stream;
-  videoElement.className = 'absolute inset-0 w-full h-full object-cover rounded-2xl';
-
-  const videoCount = videoGrid.querySelectorAll('video').length;
-
-  videoElement.style.zIndex = videoCount + 1;
+  videoElement.className = "w-full h-full object-cover";
 
   // Don't play our own microphone back to us
   if (videoParticipantId === participantId) {
@@ -110,11 +114,24 @@ export function addParticipantVideo(videoParticipantId, stream) {
   }
 
   videoGrid.appendChild(videoElement);
+
+  updateVideoLayout();
 }
 
 export function getLocalVideoElement() {
-
   return document.getElementById(`video-${participantId}`);
+}
+
+function updateVideoLayout() {
+  const count = videoGrid.querySelectorAll("video").length;
+
+  if (count === 1) {
+    videoGrid.classList.remove("grid-cols-2");
+    videoGrid.classList.add("grid-cols-1");
+  } else if (count === 2) {
+    videoGrid.classList.remove("grid-cols-1");
+    videoGrid.classList.add("grid-cols-2");
+  }
 }
 
 // ==================================================
@@ -133,9 +150,7 @@ async function getCameras() {
 async function getVideoCameras() {
   const allDevices = await getCameras();
 
-  return allDevices.filter(
-    (device) => device.kind === "videoinput",
-  );
+  return allDevices.filter((device) => device.kind === "videoinput");
 }
 
 async function populateCameraList() {
@@ -158,8 +173,7 @@ async function populateCameraList() {
 
     option.value = camera.deviceId;
     option.className = "option-default";
-    option.textContent =
-      camera.label || `Camera ${index + 1}`;
+    option.textContent = camera.label || `Camera ${index + 1}`;
 
     cameraList.appendChild(option);
   });

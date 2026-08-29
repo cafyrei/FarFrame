@@ -1,4 +1,5 @@
 import { getSocket, participantId} from "../utils/socket.js";
+import { setParticipantMirror } from "./session-camera.js";
 import {
   establishRTCOffer,
   handleOffer,
@@ -9,9 +10,7 @@ import {
 // WebSocket Connection
 const socket = getSocket();
 
-// Temporary Button
-const testBtn = document.getElementById("testBtn");
-
+// State Variables
 let isHost = false;
 let partipantCount = null;
 let offeredStarted = false;
@@ -37,6 +36,8 @@ if (socket) {
         partipantCount = data.count;
 
         break;
+
+      // RTC COMMUNICATION CASES
       case "offer":
         handleOffer(data.offer, data.participantId);
         break;
@@ -46,6 +47,10 @@ if (socket) {
       case "candidate":
         handleCandidate(data.candidate);
         break;
+
+      // SESSION EVENT CASES
+      case "mirror_changed":
+        setParticipantMirror(data.participantId, data.mirrored);
     }
 
     // This Establish(starts) the handshake
@@ -58,11 +63,27 @@ if (socket) {
   };
 }
 
+// Session Functions
+
+export function sendMirrorState(isMirrored) {
+  if(socket?.readyState !== WebSocket.OPEN) return;
+  
+  socket.send(
+    JSON.stringify({
+      type: "mirror_changed",
+      participantId,
+      mirrored: isMirrored,
+    }),
+  );
+}
+
 
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // TEMPORARY BUTTON FOR DEBUGGING
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+// const testBtn = document.getElementById("testBtn");
 
 // testBtn.addEventListener("click", () => {
 //   if (socket && socket.readyState === WebSocket.OPEN) {
