@@ -70,9 +70,9 @@
 @theme {
   /* Fonts */
   --font-satisfy: "Satisfy", cursive;
+  --font-marck: "MarckScript", cursive;
   --font-prociono: "Prociono", serif;
   --font-basic: "Basic", serif;
-  --font-marck: "MarckScript", cursive;
   
   /* Bind the keyframes to custom animation utility */
   --animate-grow: grow 2s ease-in-out infinite;

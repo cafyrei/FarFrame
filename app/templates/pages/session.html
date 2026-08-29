@@ -9,7 +9,7 @@
   </head>
   <body class="bg-[#faf2eb]">
     <nav
-      class="flex flex-col gap-4 m-6 md:flex-row md:items-center md:justify-between"
+      class="flex flex-col gap-4 m-2 mx-6 mb-9 md:flex-row md:items-center md:justify-between"
     >
       <div class="flex flex-row items-center gap-3">
         <img
@@ -49,6 +49,21 @@
     </nav>
 
     <main class="camera-control flex flex-col gap-2 justify-center text-center">
+      <div class="mb-3 font-basic">
+        <h2 class="text-2xl font-bold text-[#ff648d] relative inline-block">
+          <img
+            src="/static/images/visuals/dashed-lines.png"
+            class="absolute w-10 h-10 -right-10 -top-5"
+          />
+          You're all set!
+          <img
+            src="/static/images/visuals/dashed-lines.png"
+            class="absolute w-10 h-10 -left-10 -top-5 -scale-x-100"
+          />
+        </h2>
+        <p class="text-black/70">Smile, pose and make sure you have fun!</p>
+      </div>
+
       <div class="webcam-container flex flex-col gap-4">
         <div
           id="camera-selector"
@@ -57,23 +72,23 @@
           <div class="list-wrapper relative group">
             <select
               id="cameraList"
-              class="bg-[#ff648d] hover:bg-[#fab1c3] cursor-pointer appearance-none rounded-full text-white font-basic pl-6 pr-9 p-2 align-center text-center"
+              class="bg-[#ff648d] hover:bg-[#fd4a77] cursor-pointer appearance-none rounded-full text-white font-basic pl-6 pr-9 p-2 align-center text-center"
             ></select>
             <img
               class="invert pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 transition-transform group-focus-within:rotate-180"
               src="/static/images/icons/dropdown-arrow.svg"
             />
           </div>
-          <button id="refreshBtn" class="primary-btn p-2 px-4">
+          <button id="refreshBtn" class="primary-btn p-1 px-2.5">
             <img
               src="/static/images/icons/refresh.svg"
               class="w-5 h-5 invert transition-transform duration-500 ease-in-out"
               alt="refresh"
             />
           </button>
-          <button id="mirrorBtn" class="primary-btn">
+          <button id="mirrorBtn" class="primary-btn p-1 px-2.5">
             <img
-              class="w-5 h-5 invert object-contain brightness-0"
+              class="w-6 h-6 invert object-contain brightness-0"
               src="/static/images/icons/mirror-right.svg"
             />
           </button>
@@ -81,11 +96,11 @@
 
         <div
           id="video-grid"
-          class="shadow relative mx-auto w-[900px] h-[500px]"
+          class="relative mx-auto w-[900px] h-[500px] bg-[#faf2eb]"
         ></div>
 
         <p
-          class="relative font-basi inline-flex items-center justify-center gap-2 px-9 py-1 mx-auto rounded-full bg-amber-100 text-amber-900 text-sm shadow-sm border border-amber-200"
+          class="relative font-basic inline-flex items-center justify-center gap-2 px-9 py-1 mx-auto rounded-full border border-dashed border-[#ff648d] text-black/40 text-sm shadow-sm"
         >
           <img
             src="/static/images/icons/heart.svg"
@@ -95,9 +110,29 @@
           Tip: Look at the camera and smile!
         </p>
 
-        <div class="camera-controls">
-          <button class="primary-btn" id="cameraBtn">Capture</button>
-          <button class="primary-btn" id="muteBtn">Mic</button>
+        <div
+          class="camera-controls flex flex-row justify-center text-center gap-2"
+        >
+          <button
+            class="primary-btn shadow px-6 flex flex-row gap-2 items-center"
+            id="cameraBtn"
+          >
+            <img
+              class="w-5 h-5 invert"
+              src="/static/images/icons/camera-white.svg"
+            />
+            <p>Capture</p>
+          </button>
+          <button
+            class="primary-btn shadow px-6 flex flex-row gap-1 items-center text-[#b8824f] bg-[#ffe8d3] border border-[#f898b1]"
+            id="muteBtn"
+          >
+            <img
+              class="w-4 h-4 invert"
+              src="/static/images/icons/unmute.svg"
+            />
+            <p>Mute</p>
+          </button>
         </div>
       </div>
     </main>
