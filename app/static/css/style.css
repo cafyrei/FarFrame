@@ -499,6 +499,12 @@
   .max-w-5xl {
     max-width: var(--container-5xl);
   }
+  .max-w-44 {
+    max-width: calc(var(--spacing) * 44);
+  }
+  .max-w-67 {
+    max-width: calc(var(--spacing) * 67);
+  }
   .max-w-\[410px\] {
     max-width: 410px;
   }
@@ -678,6 +684,9 @@
   .border-\[\#E48CA3\] {
     border-color: #E48CA3;
   }
+  .border-\[\#\] {
+    border-color: #;
+  }
   .border-\[\#eec9d3\] {
     border-color: #eec9d3;
   }
@@ -690,8 +699,17 @@
   .border-\[\#f898b1\] {
     border-color: #f898b1;
   }
+  .border-\[\#faf2eb\] {
+    border-color: #faf2eb;
+  }
+  .border-\[\#ff8fad\] {
+    border-color: #ff8fad;
+  }
   .border-\[\#ff648d\] {
     border-color: #ff648d;
+  }
+  .border-\[\#ffc0d1\] {
+    border-color: #ffc0d1;
   }
   .border-\[\#ffe8d3\] {
     border-color: #ffe8d3;
@@ -735,6 +753,9 @@
   .bg-\[\#d3a983\] {
     background-color: #d3a983;
   }
+  .bg-\[\#f5d4b7\] {
+    background-color: #f5d4b7;
+  }
   .bg-\[\#f7eeec\] {
     background-color: #f7eeec;
   }
@@ -746,6 +767,9 @@
   }
   .bg-\[\#fab1c3\] {
     background-color: #fab1c3;
+  }
+  .bg-\[\#faf1ea\] {
+    background-color: #faf1ea;
   }
   .bg-\[\#faf2eb\] {
     background-color: #faf2eb;
@@ -973,6 +997,12 @@
       color: color-mix(in oklab, var(--color-black) 20%, transparent);
     }
   }
+  .text-black\/30 {
+    color: color-mix(in srgb, #000 30%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      color: color-mix(in oklab, var(--color-black) 30%, transparent);
+    }
+  }
   .text-black\/40 {
     color: color-mix(in srgb, #000 40%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
@@ -983,6 +1013,12 @@
     color: color-mix(in srgb, #000 50%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
       color: color-mix(in oklab, var(--color-black) 50%, transparent);
+    }
+  }
+  .text-black\/60 {
+    color: color-mix(in srgb, #000 60%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      color: color-mix(in oklab, var(--color-black) 60%, transparent);
     }
   }
   .text-black\/70 {
