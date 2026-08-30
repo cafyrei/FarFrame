@@ -14,6 +14,7 @@ const socket = getSocket();
 let isHost = false;
 let partipantCount = null;
 let offeredStarted = false;
+let myPosition = null;
 
 if (socket) {
   socket.onopen = () => {
@@ -33,19 +34,23 @@ if (socket) {
         if (data.role === 'host' && participantId === data.participantId) {
           isHost = true;
         } 
+
+        if (participantId === data.participantId) {
+          myPosition = data.position;
+        }
         partipantCount = data.count;
 
         break;
 
       // RTC COMMUNICATION CASES
       case "offer":
-        handleOffer(data.offer, data.participantId, data.role);
+        await handleOffer(data.offer, data.participantId, data.position, myPosition);
         break;
       case "answer":
-        handleAnswer(data.answer, data.participantId);
+        await handleAnswer(data.answer, data.participantId, data.position);
         break;
       case "candidate":
-        handleCandidate(data.candidate);
+        await handleCandidate(data.candidate);
         break;
 
       // SESSION EVENT CASES
@@ -58,7 +63,7 @@ if (socket) {
     if (!offeredStarted) {
       if (isHost && partipantCount === 2) {
         offeredStarted = true;
-        establishRTCOffer(data.role);
+        establishRTCOffer(myPosition);
       }
     }
   };

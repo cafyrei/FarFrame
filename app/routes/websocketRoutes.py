@@ -29,6 +29,7 @@ async def websocket_endpoint(websocket: WebSocket, room_code: str, participantId
         "participantId": participantId,
         "role": participant["role"],
         "avatar": participant["avatar"],
+        "position": participant["position"],
         "websocket": websocket
     }
     
@@ -50,6 +51,7 @@ async def websocket_endpoint(websocket: WebSocket, room_code: str, participantId
             "participantId": participantId,
             "role" : participant_data["role"],
             "avatar": participant_data["avatar"],
+            "position": participant_data["position"],
             "count": participants_in_session,
         },
         room_code

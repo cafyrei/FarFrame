@@ -7,12 +7,12 @@ import { participantId } from "../../utils/socket.js";
 const videoGrid =
   document.querySelector(".video-grid") ||
   document.getElementById("video-grid");
-
+setParticipantMirror
 // ==================================================
 // Video UI
 // ==================================================
 
-export function addParticipantVideo(videoParticipantId, stream) {
+export function addParticipantVideo(videoParticipantId, stream, position) {
   const videoId = `video-${videoParticipantId}`;
 
   // Prevent duplicate participant videos
@@ -25,6 +25,7 @@ export function addParticipantVideo(videoParticipantId, stream) {
   videoElement.playsInline = true;
   videoElement.srcObject = stream;
   videoElement.className = "w-full h-full object-cover";
+  videoElement.style.order = String(position);
 
   // Don't play our own microphone back to us
   if (videoParticipantId === participantId) {

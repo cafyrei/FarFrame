@@ -44,11 +44,11 @@ async function startMedia() {
   }
 }
 
-export async function initLocalVideo() {
+export async function initLocalVideo(myPosition) {
   const stream = await startMedia();
 
   if (stream) {
-    addParticipantVideo(participantId, stream);
+    addParticipantVideo(participantId, stream, myPosition);
   }
 
   return stream;
@@ -164,7 +164,6 @@ export async function initializeCamera() {
   console.log("MediaDevices API is supported!");
 
   await populateCameraList();
-  await initLocalVideo();
 }
 
 initializeCamera();
