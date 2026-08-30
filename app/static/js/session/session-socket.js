@@ -1,5 +1,5 @@
 import { getSocket, participantId} from "../utils/socket.js";
-import { setParticipantMirror, startStream } from "./session-camera.js";
+import { setParticipantMirror } from "./media/video.js";
 import {
   establishRTCOffer,
   handleOffer,

@@ -1,15 +1,9 @@
-import { participantId } from "../utils/socket.js";
-import {
-  replaceVideoTrack, 
-} from "./session-rtc.js";
+import { participantId } from "../../utils/socket.js";
+import { addParticipantVideo, getLocalVideoElement } from "./video.js";
 
 // ==================================================
 // DOM Elements
 // ==================================================
-
-const videoGrid =
-  document.querySelector(".video-grid") ||
-  document.getElementById("video-grid");
 
 const cameraList = document.getElementById("cameraList");
 
@@ -50,42 +44,6 @@ async function startMedia() {
   }
 }
 
-export function setParticipantMirror(participantId, isMirrored) {
-  const video = document.getElementById(`video-${participantId}`);
-
-  if (!video) {
-    console.warn("Local video not available.");
-    return;
-  }
-
-  video.style.transform = isMirrored ? "scaleX(-1)" : "scaleX(1)";
-}
-
-// NOTE: THIS FUNCTION IS NOT USED AND NOT DELETED FOR FUTURE UPDATE
-//       IF TIME COMES WE INCLUDE ABILITY TO TURN OFF CAMERA FOR PARTICIPANTS
-//       AGAIN NOTE !!!! NOT REFERENCED TO ANY FILES!!!!
-
-export function stopMedia() {
-  if (!mediaStream) return;
-
-  mediaStream.getTracks().forEach((track) => {
-    track.stop();
-  });
-
-  const localVideo = document.getElementById(`video-${participantId}`);
-
-  if (localVideo) {
-    localVideo.srcObject = null;
-  }
-
-  cameraBtn.disabled = false;
-  muteBtn.disabled = false;
-}
-
-// ==================================================
-// Video UI
-// ==================================================
-
 export async function initLocalVideo() {
   const stream = await startMedia();
 
@@ -94,46 +52,6 @@ export async function initLocalVideo() {
   }
 
   return stream;
-}
-
-export function addParticipantVideo(videoParticipantId, stream) {
-  const videoId = `video-${videoParticipantId}`;
-
-  // Prevent duplicate participant videos
-  if (document.getElementById(videoId)) return;
-
-  const videoElement = document.createElement("video");
-
-  videoElement.id = videoId;
-  videoElement.autoplay = true;
-  videoElement.playsInline = true;
-  videoElement.srcObject = stream;
-  videoElement.className = "w-full h-full object-cover";
-
-  // Don't play our own microphone back to us
-  if (videoParticipantId === participantId) {
-    videoElement.muted = true;
-  }
-
-  videoGrid.appendChild(videoElement);
-
-  updateVideoLayout();
-}
-
-export function getLocalVideoElement() {
-  return document.getElementById(`video-${participantId}`);
-}
-
-function updateVideoLayout() {
-  const count = videoGrid.querySelectorAll("video").length;
-
-  if (count === 1) {
-    videoGrid.classList.remove("grid-cols-2");
-    videoGrid.classList.add("grid-cols-1");
-  } else if (count === 2) {
-    videoGrid.classList.remove("grid-cols-1");
-    videoGrid.classList.add("grid-cols-2");
-  }
 }
 
 // ==================================================
@@ -152,7 +70,9 @@ async function getCameras() {
 async function getVideoCameras() {
   const allDevices = await getCameras();
 
-  return allDevices.filter((device) => device.kind === "videoinput");
+  return allDevices.filter(
+    (device) => device.kind === "videoinput"
+  );
 }
 
 export async function populateCameraList() {
@@ -175,18 +95,23 @@ export async function populateCameraList() {
 
     option.value = camera.deviceId;
     option.className = "option-default";
-    option.textContent = camera.label || `Camera ${index + 1}`;
+    option.textContent =
+      camera.label || `Camera ${index + 1}`;
 
     cameraList.appendChild(option);
   });
 }
+
+// ==================================================
+// Camera Switching
+// ==================================================
 
 export async function startStream(cameraDeviceId) {
   const videoElement = getLocalVideoElement();
 
   if (!videoElement) {
     console.error("Local video element not found.");
-    return;
+    return null;
   }
 
   const constraints = {
@@ -204,21 +129,23 @@ export async function startStream(cameraDeviceId) {
 
     const newVideoTrack = newStream.getVideoTracks()[0];
 
-    // Change what the remote participant receives
-    await replaceVideoTrack(newVideoTrack);
-
     // Change local preview
     videoElement.srcObject = newStream;
 
-    // Stop the OLD camera after replacement
+    // Stop old camera
     if (oldStream) {
       oldStream.getVideoTracks().forEach((track) => {
         track.stop();
       });
     }
+
+    // RTC layer can use this
+    return newVideoTrack;
   } catch (error) {
     console.error("Stream error:", error);
     alert(`Failed to start camera: ${error.message}`);
+
+    return null;
   }
 }
 
@@ -226,10 +153,10 @@ export async function startStream(cameraDeviceId) {
 // Initialization
 // ==================================================
 
-async function initializeCamera() {
+export async function initializeCamera() {
   if (!navigator.mediaDevices?.enumerateDevices) {
     alert(
-      "This browser does not support camera detection. Please use a modern browser like Chrome, Firefox, or Edge.",
+      "This browser does not support camera detection. Please use a modern browser like Chrome, Firefox, or Edge."
     );
     return;
   }

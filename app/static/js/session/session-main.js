@@ -1,13 +1,15 @@
 import {
   populateCameraList,
-  setParticipantMirror,
   startStream
-} from "./session-camera.js";
+} from "./media/camera.js";
+import {
+  setParticipantMirror
+} from "./media/video.js";
 import {
   sendMirrorState, 
 } from "./session-socket.js";
 import { participantId } from "../utils/socket.js";
-
+import { replaceVideoTrack } from "./session-rtc.js";
 
 // DOM INITIALIZATION
 
@@ -76,6 +78,11 @@ refreshBtn.addEventListener("click", async () => {
   refreshImg.classList.toggle("rotate-180");
 });
 
-cameraList.addEventListener("change", () => {
-  startStream(cameraList.value);
+cameraList.addEventListener("change", async () => {
+  const newTrack = await startStream(cameraList.value);
+
+  if(!newTrack) return;
+  
+  await replaceVideoTrack(newTrack);
+  
 });

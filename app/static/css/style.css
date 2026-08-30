@@ -696,9 +696,6 @@
   .border-\[\#E48CA3\] {
     border-color: #E48CA3;
   }
-  .border-\[\#\] {
-    border-color: #;
-  }
   .border-\[\#eec9d3\] {
     border-color: #eec9d3;
   }
@@ -711,20 +708,8 @@
   .border-\[\#f898b1\] {
     border-color: #f898b1;
   }
-  .border-\[\#faf2eb\] {
-    border-color: #faf2eb;
-  }
   .border-\[\#ff8fad\] {
     border-color: #ff8fad;
-  }
-  .border-\[\#ff648d\] {
-    border-color: #ff648d;
-  }
-  .border-\[\#ffc0d1\] {
-    border-color: #ffc0d1;
-  }
-  .border-\[\#ffe8d3\] {
-    border-color: #ffe8d3;
   }
   .border-amber-200 {
     border-color: var(--color-amber-200);
@@ -765,20 +750,11 @@
   .bg-\[\#b8824f\] {
     background-color: #b8824f;
   }
-  .bg-\[\#d3a983\] {
-    background-color: #d3a983;
-  }
-  .bg-\[\#f5d4b7\] {
-    background-color: #f5d4b7;
-  }
   .bg-\[\#f7eeec\] {
     background-color: #f7eeec;
   }
   .bg-\[\#f16c90\] {
     background-color: #f16c90;
-  }
-  .bg-\[\#f898b1\] {
-    background-color: #f898b1;
   }
   .bg-\[\#fab1c3\] {
     background-color: #fab1c3;
@@ -994,9 +970,6 @@
   .whitespace-nowrap {
     white-space: nowrap;
   }
-  .text-\[\#7e5c3c\] {
-    color: #7e5c3c;
-  }
   .text-\[\#E48CA3\] {
     color: #E48CA3;
   }
@@ -1005,9 +978,6 @@
   }
   .text-\[\#d4597a\] {
     color: #d4597a;
-  }
-  .text-\[\#ddb289\] {
-    color: #ddb289;
   }
   .text-\[\#f16c90\] {
     color: #f16c90;
@@ -1039,22 +1009,10 @@
       color: color-mix(in oklab, var(--color-black) 30%, transparent);
     }
   }
-  .text-black\/40 {
-    color: color-mix(in srgb, #000 40%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      color: color-mix(in oklab, var(--color-black) 40%, transparent);
-    }
-  }
   .text-black\/50 {
     color: color-mix(in srgb, #000 50%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
       color: color-mix(in oklab, var(--color-black) 50%, transparent);
-    }
-  }
-  .text-black\/60 {
-    color: color-mix(in srgb, #000 60%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      color: color-mix(in oklab, var(--color-black) 60%, transparent);
     }
   }
   .text-black\/70 {

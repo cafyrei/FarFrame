@@ -1,5 +1,6 @@
 import { getSocket, participantId } from "../utils/socket.js";
-import { initLocalVideo, addParticipantVideo } from "./session-camera.js";
+import { addParticipantVideo } from "./media/video.js";
+import { initLocalVideo } from "./media/camera.js";
 
 const socket = getSocket();
 
@@ -142,7 +143,6 @@ async function queueOfCandidates() {
     await peerConnection.addIceCandidate(candidate);
   }
 }
-
 
 export async function replaceVideoTrack(newTrack) {
   const videoSender = peerConnection
