@@ -14,6 +14,7 @@ setParticipantMirror
 
 export function addParticipantVideo(videoParticipantId, stream, position) {
   const videoId = `video-${videoParticipantId}`;
+  console.log("Creating video:", videoId);
 
   // Prevent duplicate participant videos
   if (document.getElementById(videoId)) return;
@@ -38,6 +39,12 @@ export function addParticipantVideo(videoParticipantId, stream, position) {
 }
 
 export function getLocalVideoElement() {
+  console.log("Looking for:", `video-${participantId}`);
+  console.log(
+    "Found:",
+    document.getElementById(`video-${participantId}`)
+  );
+
   return document.getElementById(`video-${participantId}`);
 }
 

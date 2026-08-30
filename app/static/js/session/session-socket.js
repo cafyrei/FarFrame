@@ -1,5 +1,6 @@
 import { getSocket, participantId} from "../utils/socket.js";
 import { setParticipantMirror } from "./media/video.js";
+import { initLocalVideo } from "./media/camera.js";
 import {
   establishRTCOffer,
   handleOffer,
@@ -37,6 +38,7 @@ if (socket) {
 
         if (participantId === data.participantId) {
           myPosition = data.position;
+          await initLocalVideo(myPosition);
         }
         partipantCount = data.count;
 
