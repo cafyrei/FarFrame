@@ -1,10 +1,12 @@
 import { getSocket, participantId } from "../utils/socket.js";
-import { initLocalVideo, addParticipantVideo } from "./session-main.js";
+import { addParticipantVideo } from "./media/video.js";
+import { initLocalVideo } from "./media/camera.js";
 
 const socket = getSocket();
 
 let pendingIceCandidates = []; // Queue Array for ICE
 let remoteParticipantId = null;
+let remoteParticipantPosition = null;
 
 // WebRTC stream connetion
 const peerConnection = new RTCPeerConnection();
@@ -18,11 +20,11 @@ const peerConnection = new RTCPeerConnection();
  */
 peerConnection.ontrack = (event) => {
     if (event.streams && event.streams[0]) {
-      addParticipantVideo(remoteParticipantId, event.streams[0]);
+      addParticipantVideo(remoteParticipantId, event.streams[0], remoteParticipantPosition);
     } else {
       let inBoundStream = new MediaStream();
       inBoundStream.addTrack(event.track);
-      addParticipantVideo(remoteParticipantId, inBoundStream);
+      addParticipantVideo(remoteParticipantId, inBoundStream, remoteParticipantPosition);
     }
 };
 
@@ -58,8 +60,8 @@ export async function handleCandidate(candidate) {
  * Captures local media tracks, attaches them to the peer connection,
  * creates an SDP offer, sets it locally, and transmits it via WebSocket.
  */
-export async function establishRTCOffer() {
-    const localStream = await initLocalVideo();
+export async function establishRTCOffer(senderPosition) {
+    const localStream = await initLocalVideo(senderPosition);
     const tracks = localStream.getTracks();
 
     tracks.forEach((track) => {
@@ -75,6 +77,7 @@ export async function establishRTCOffer() {
         type: "offer",
         offer: offer,
         participantId: participantId,
+        position: senderPosition,
       }),
     );
 }
@@ -86,9 +89,9 @@ export async function establishRTCOffer() {
  *
  * @param {RTCSessionDescriptionInit} offer - The SDP offer received from the caller.
  */
-export async function handleOffer(offer, senderParticipantId) {
+export async function handleOffer(offer, senderParticipantId, senderPosition, myPosition) {
   if (peerConnection) {
-    const localStream = await initLocalVideo();
+    const localStream = await initLocalVideo(myPosition);
     const tracks = localStream.getTracks();
 
     tracks.forEach((track) => {
@@ -96,6 +99,7 @@ export async function handleOffer(offer, senderParticipantId) {
     });
 
     remoteParticipantId = senderParticipantId;
+    remoteParticipantPosition = senderPosition;
 
     await peerConnection.setRemoteDescription(offer);
 
@@ -107,6 +111,7 @@ export async function handleOffer(offer, senderParticipantId) {
         type: "answer",
         answer: answer,
         participantId: participantId,
+        position: myPosition,
       }),
     );
 
@@ -120,9 +125,10 @@ export async function handleOffer(offer, senderParticipantId) {
  *
  * @param {RTCSessionDescriptionInit} answer - The SDP answer received from the remote peer.
  */
-export async function handleAnswer(answer, senderParticipantId) {
+export async function handleAnswer(answer, senderParticipantId, senderPosition) {
   if (peerConnection) {
     remoteParticipantId = senderParticipantId;
+    remoteParticipantPosition = senderPosition;
     await peerConnection.setRemoteDescription(answer);
 
     await queueOfCandidates();
@@ -139,4 +145,18 @@ async function queueOfCandidates() {
     const candidate = pendingIceCandidates.shift();
     await peerConnection.addIceCandidate(candidate);
   }
+}
+
+export async function replaceVideoTrack(newTrack) {
+  const videoSender = peerConnection
+    .getSenders()
+    .find((sender) => sender.track?.kind === "video");
+
+  if (!videoSender) {
+    console.warn("No video sender found.");
+    return;
+  }
+
+  await videoSender.replaceTrack(newTrack);
+
 }

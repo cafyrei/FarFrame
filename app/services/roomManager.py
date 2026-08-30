@@ -75,7 +75,6 @@ class RoomManager:
                 )
 
             return {
-                "message": "Joined successfully",
                 "room_code": room.room_code,
                 "participantId" : "PID" + participantId,
                 "role" : "guest",

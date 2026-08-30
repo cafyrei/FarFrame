@@ -1,19 +1,25 @@
 class SessionManager :
     def __init__(self):
         self.participants = {}
+        self.next_position = {}
         
-    def add_participant(self,  participant):
+    def add_participant(self, participant):
         room_code = participant["room_code"]
         participant_id = participant["participantId"]
-        participant_role = participant["role"]
-        participant_avatar = participant["avatar"]
-        
+
         if room_code not in self.participants:
             self.participants[room_code] = {}
-            
+            self.next_position[room_code] = 0
+
+        position = self.next_position[room_code]
+        self.next_position[room_code] += 1
+
+        participant["position"] = position
+
         self.participants[room_code][participant_id] = {
-            "role" : participant_role,
-            "avatar": participant_avatar
+            "role": participant["role"],
+            "avatar": participant["avatar"],
+            "position": position,
         }
     
     def validate_participant(self, room_code, participantId):

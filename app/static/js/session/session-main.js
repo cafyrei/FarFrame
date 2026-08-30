@@ -1,91 +1,88 @@
-import {participantId } from "../utils/socket.js";
+import {
+  populateCameraList,
+  startStream
+} from "./media/camera.js";
+import {
+  setParticipantMirror
+} from "./media/video.js";
+import {
+  sendMirrorState, 
+} from "./session-socket.js";
+import { participantId } from "../utils/socket.js";
+import { replaceVideoTrack } from "./session-rtc.js";
 
-const videoGrid =
-  document.querySelector(".video-grid") ||
-  document.getElementById("video-grid");
-const cameraBtn = document.getElementById("cameraBtn");
+// DOM INITIALIZATION
+
+const refreshBtn = document.getElementById("refreshBtn");
+const mirrorBtn = document.getElementById("mirrorBtn");
 const muteBtn = document.getElementById("muteBtn");
+const cameraList = document.getElementById("cameraList");
 
-let mediaStream = null;
+// TOGGLE CONTROL DECLARATION
 
-// Initialize camera on startup
-initLocalVideo();
+let isMirrored = false;
+let isMuted = false;
 
-muteBtn.addEventListener("click", () => {
-  stopMedia();
-  console.log("end");
+muteBtn?.addEventListener("click", () => {
+  isMuted = !isMuted;
+
+  // Icons and Labels
+  const icon = isMuted
+    ? "/static/images/icons/mute.svg"
+    : "/static/images/icons/unmute.svg";
+  const label = isMuted ? "Unmute" : "Mute";
+
+  // Update inner DOM elements safely
+  muteBtn.querySelector("p").textContent = label;
+
+  const iconDiv = muteBtn.querySelector("div");
+  iconDiv.style.maskImage = `url('${icon}')`;
+  iconDiv.style.webkitMaskImage = `url('${icon}')`;
 });
 
-function updateParticipants(event) {
-  const data = JSON.parse(event.data);
+mirrorBtn?.addEventListener("click", () => {
+  isMirrored = !isMirrored;
+  
+  // CHANGE OWN CAMERA
+  setParticipantMirror(participantId, isMirrored);
+  
+  // SEND THE MESSAGE TO REMOTE
+  sendMirrorState(isMirrored);
+  
+  // ONLY CHANGE THE ICON INSIDE THE BUTTON OF MIRROR
+  const side = isMirrored ? "right" : "left";
+  const template = document.createElement("template");
 
-  let participant_count = null;
+  template.innerHTML = `
+    <img
+      class="w-5 h-5 invert object-contain brightness-0"
+      src="../../static/images/icons/mirror-${side}.svg"
+    />
+  `.trim();
 
-  if (data.type === "participant_count") {
-    participant_count = data.count;
+  mirrorBtn.replaceChildren(template.content.firstElementChild);
+});
+
+// REFRESH CAMERA LIST (DETECT NEW CAMERAS CONNECTED TO THE COMPUTER)
+refreshBtn.addEventListener("click", async () => {
+  
+  await populateCameraList();
+
+  cameraList.disabled = false;
+
+  if (cameraList.options.length > 0 && cameraList.options[0].value) {
+    startStream(cameraList.value);
   }
-}
 
-export function addParticipantVideo(participantId, stream) {
-  if (document.getElementById(`video-${participantId}`)) return;
+  const refreshImg = refreshBtn.querySelector("img");
+  refreshImg.classList.toggle("rotate-180");
+});
 
-  const videoElement = document.createElement("video");
-  videoElement.id = `video-${participantId}`;
-  videoElement.autoplay = true;
-  videoElement.playsInline = true;
-  videoElement.srcObject = stream;
+cameraList.addEventListener("change", async () => {
+  const newTrack = await startStream(cameraList.value);
 
-  if (participantId === "local") {
-    videoElement.muted = true;
-  }
-
-  videoGrid.appendChild(videoElement);
-}
-
-export async function initLocalVideo() {
-  const stream = await startMedia();
-  if (stream) {
-    addParticipantVideo(participantId, stream);
-  }
-
-  return stream;
-}
-
-async function startMedia() {
-  try {
-    mediaStream = await navigator.mediaDevices.getUserMedia({
-      video: {
-        width: { ideal: 1280 },
-        height: { ideal: 720 },
-        facingMode: "user",
-      },
-      audio: true,
-    });
-    return mediaStream;
-  } catch (error) {
-    console.error("Error accessing media devices:", error);
-    if (error.name === "NotAllowedError") {
-      alert("Permission denied. Please allow camera.");
-    } else if (error.name === "NotFoundError") {
-      alert("No webcam or microphone found on this device.");
-    } else {
-      alert(`Error: ${error.message}`);
-    }
-    return null;
-  }
-}
-
-
-function stopMedia() {
-  if (mediaStream) {
-    mediaStream.getTracks().forEach((track) => track.stop());
-
-    const localVideo = document.getElementById("video-local");
-    if (localVideo) {
-      localVideo.srcObject = null;
-    }
-
-    cameraBtn.disabled = false;
-    muteBtn.disabled = false;
-  }
-}
+  if(!newTrack) return;
+  
+  await replaceVideoTrack(newTrack);
+  
+});

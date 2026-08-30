@@ -1,4 +1,5 @@
-import { getSocket } from "../utils/socket.js";
+import { getSocket, participantId} from "../utils/socket.js";
+import { setParticipantMirror } from "./media/video.js";
 import {
   establishRTCOffer,
   handleOffer,
@@ -9,12 +10,11 @@ import {
 // WebSocket Connection
 const socket = getSocket();
 
-// Temporary Button
-const testBtn = document.getElementById("testBtn");
-
+// State Variables
 let isHost = false;
-let partipantCount = 0;
+let partipantCount = null;
 let offeredStarted = false;
+let myPosition = null;
 
 if (socket) {
   socket.onopen = () => {
@@ -30,22 +30,32 @@ if (socket) {
     console.log("Data: ", data); // Data Check
 
     switch (data.type) {
-      case "role":
-        if (data.role === "host") {
+      case "participant_joined":
+        if (data.role === 'host' && participantId === data.participantId) {
           isHost = true;
+        } 
+
+        if (participantId === data.participantId) {
+          myPosition = data.position;
         }
-        break;
-      case "participant_count":
         partipantCount = data.count;
+
         break;
+
+      // RTC COMMUNICATION CASES
       case "offer":
-        handleOffer(data.offer, data.participantId);
+        await handleOffer(data.offer, data.participantId, data.position, myPosition);
         break;
       case "answer":
-        handleAnswer(data.answer, data.participantId);
+        await handleAnswer(data.answer, data.participantId, data.position);
         break;
       case "candidate":
-        handleCandidate(data.candidate);
+        await handleCandidate(data.candidate);
+        break;
+
+      // SESSION EVENT CASES
+      case "mirror_changed":
+        setParticipantMirror(data.participantId, data.mirrored);
         break;
     }
 
@@ -53,26 +63,42 @@ if (socket) {
     if (!offeredStarted) {
       if (isHost && partipantCount === 2) {
         offeredStarted = true;
-        establishRTCOffer();
+        establishRTCOffer(myPosition);
       }
     }
   };
+}
+
+// Session Functions
+
+export function sendMirrorState(isMirrored) {
+  if(socket?.readyState !== WebSocket.OPEN) return;
+  
+  socket.send(
+    JSON.stringify({
+      type: "mirror_changed",
+      participantId,
+      mirrored: isMirrored,
+    }),
+  );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // TEMPORARY BUTTON FOR DEBUGGING
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-testBtn.addEventListener("click", () => {
-  if (socket && socket.readyState === WebSocket.OPEN) {
-    socket.send(
-      JSON.stringify({
-        type: "test",
-        message: "Hello!",
-      }),
-    );
-  }
-});
+// const testBtn = document.getElementById("testBtn");
+
+// testBtn.addEventListener("click", () => {
+//   if (socket && socket.readyState === WebSocket.OPEN) {
+//     socket.send(
+//       JSON.stringify({
+//         type: "test",
+//         message: "Hello!",
+//       }),
+//     );
+//   }
+// });
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // TO HERE
