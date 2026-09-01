@@ -7,7 +7,20 @@ import { participantId } from "../../utils/socket.js";
 const videoGrid =
   document.querySelector(".video-grid") ||
   document.getElementById("video-grid");
-setParticipantMirror
+setParticipantMirror;
+
+// ==================================================
+// Filter List
+// ==================================================
+
+const filterStyles = {
+  none: "none",
+  grayscale: "grayscale(100%)",
+  sepia: "sepia(100%)",
+  vintage: "sepia(50%) contrast(120%) brightness(90%)",
+  vivid: "saturate(200%) contrast(110%)",
+};
+
 // ==================================================
 // Video UI
 // ==================================================
@@ -40,30 +53,36 @@ export function addParticipantVideo(videoParticipantId, stream, position) {
 
 export function getLocalVideoElement() {
   console.log("Looking for:", `video-${participantId}`);
-  console.log(
-    "Found:",
-    document.getElementById(`video-${participantId}`)
-  );
+  console.log("Found:", document.getElementById(`video-${participantId}`));
 
   return document.getElementById(`video-${participantId}`);
 }
 
-export function setParticipantMirror(
-  videoParticipantId,
-  isMirrored
-) {
-  const video = document.getElementById(
-    `video-${videoParticipantId}`
-  );
+
+// ==================================================
+// Changes Happen in Video
+// ==================================================
+
+export function setFilter(filter) {
+  if (!videoGrid) {
+    console.warn("Video grid not found.");
+    return;
+  }
+
+  if (videoGrid) {
+    videoGrid.style.filter = filterStyles[filter] || "none";
+  }
+}
+
+export function setParticipantMirror(videoParticipantId, isMirrored) {
+  const video = document.getElementById(`video-${videoParticipantId}`);
 
   if (!video) {
     console.warn("Participant video not available.");
     return;
   }
 
-  video.style.transform = isMirrored
-    ? "scaleX(-1)"
-    : "scaleX(1)";
+  video.style.transform = isMirrored ? "scaleX(-1)" : "scaleX(1)";
 }
 
 // ==================================================

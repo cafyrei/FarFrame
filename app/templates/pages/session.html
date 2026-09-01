@@ -100,7 +100,7 @@
           </button>
         </div>
 
-        <div class="grid grid-cols-[1fr_900px_1fr] items-center gap-4 w-full">
+        <div class="grid grid-cols-[1fr_minmax(0,900px)_1fr] w-full gap-4">
           <!-- Left Column: Sidebar aligned to the right edge near the video -->
           <div
             class="justify-self-end rounded-xl p-1 flex items-center justify-center"
@@ -180,9 +180,10 @@
           </div>
 
           <!-- Center Column: Video Player Container (900px wide) -->
-          <div id="video-grid" class="mx-auto w-[900px] h-[500px] bg-[#faf2eb] grid grid-cols-1 overflow-hidden rounded-2xl">
-            <!--  Your video component goes here -->
-          </div>
+          <div
+            id="video-grid"
+            class="w-full aspect-video bg-[#faf2eb] grid grid-cols-1 overflow-hidden rounded-2xl"
+          ></div>
 
           <!-- Right Column -->
           <div class="justify-self-start">
@@ -233,6 +234,10 @@
     <script type="module" src="/static/js/session/session-main.js"></script>
     <script type="module" src="/static/js/session/media/camera.js"></script>
     <script type="module" src="/static/js/session/media/video.js"></script>
-    <script type="module" src="/static/js/utils/scroll-container.js" defer></script>
+    <script
+      type="module"
+      src="/static/js/utils/scroll-container.js"
+      defer
+    ></script>
   </body>
 </html>

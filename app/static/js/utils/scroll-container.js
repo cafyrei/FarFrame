@@ -1,29 +1,19 @@
+import { setFilter } from "../session/media/video.js";
+import { sendFilterState } from "../session/session-socket.js";
+
 document.addEventListener("DOMContentLoaded", () => {
   const wrapper = document.getElementById("filter-wrapper");
+
+  if (!wrapper) return;
+  
   const buttons = Array.from(wrapper.querySelectorAll(".filters"));
   const totalItems = buttons.length;
-
-  // Select video element
-  const videoElement = document.querySelector("video-grid");
 
   let activeIndex = 0;
   let startY = 0;
   let isDragging = false;
   let hasDragged = false;
-
-  const filterStyles = {
-    none: "none",
-    grayscale: "grayscale(100%)",
-    sepia: "sepia(100%)",
-    vintage: "sepia(50%) contrast(120%) brightness(90%)",
-    vivid: "saturate(200%) contrast(110%)",
-  };
-
-  function activateFilter(filterName) {
-    if (videoElement) {
-      videoElement.style.filter = filterStyles[filterName] || "none";
-    }
-  }
+  let currentFilter = null;
 
   // Calculate 3D positioning AND instantly activate the centered item
   function renderWheel() {
@@ -51,8 +41,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
           // Automatically trigger active filter state as soon as it lands in center
           const activeFilter = btn.dataset.filter;
-          console.log(`Activating filter: ${activeFilter}`);
-          activateFilter(activeFilter);
+          if (activeFilter !== currentFilter) {
+            currentFilter = activeFilter;
+
+            setFilter(activeFilter);
+            sendFilterState(activeFilter);
+          }
         } else {
           btn.classList.remove("ring-4", "ring-cyan-400");
         }
