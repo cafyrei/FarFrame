@@ -67,7 +67,7 @@
       <div class="webcam-container flex flex-col gap-4">
         <div
           id="camera-selector"
-          class="flex flex-row gap-2 text-center justify-center"
+          class="flex flex-row gap-2 text-center justify-center mx-4"
         >
           <div class="list-wrapper relative group inline-block">
             <select
@@ -81,7 +81,11 @@
               alt="Dropdown arrow"
             />
           </div>
-          <button id="refreshBtn" class="primary-btn p-1 px-2.5" title="Refresh Camera List">
+          <button
+            id="refreshBtn"
+            class="primary-btn p-1 px-2.5"
+            title="Refresh Camera List"
+          >
             <img
               src="/static/images/icons/refresh.svg"
               class="w-5 h-5 invert transition-transform duration-500 ease-in-out"
@@ -96,10 +100,95 @@
           </button>
         </div>
 
-        <div
-          id="video-grid"
-          class="mx-auto w-[900px] h-[500px] bg-[#faf2eb] grid grid-cols-1 overflow-hidden rounded-2xl"
-        ></div>
+        <div class="grid grid-cols-[1fr_900px_1fr] items-center gap-4 w-full">
+          <!-- Left Column: Sidebar aligned to the right edge near the video -->
+          <div
+            class="justify-self-end rounded-xl p-1 flex items-center justify-center"
+          >
+            <!-- Perspective Container for the Convex Infinite Cylinder -->
+            <div
+              id="filter-wrapper"
+              class="relative h-[280px] w-[85px] overflow-hidden flex justify-center items-center select-none touch-none cursor-grab active:cursor-grabbing"
+              style="perspective: 600px"
+            >
+              <div
+                id="video-filter"
+                class="relative w-full h-full flex justify-center items-center"
+                style="transform-style: preserve-3d"
+              >
+                <button
+                  class="filters absolute transition-all duration-300 ease-out"
+                  type="button"
+                  data-filter="none"
+                >
+                  <img
+                    src="/static/images/visuals/filter-placeholder.svg"
+                    class="filter-image w-14 h-14 rounded-full border-2 border-white pointer-events-none"
+                    alt="None"
+                  />
+                </button>
+
+                <button
+                  class="filters absolute transition-all duration-300 ease-out"
+                  type="button"
+                  data-filter="grayscale"
+                >
+                  <img
+                    src="/static/images/visuals/filter-placeholder.svg"
+                    class="filter-image w-14 h-14 rounded-full border-2 border-white pointer-events-none"
+                    alt="grayscale"
+                  />
+                </button>
+
+                <button
+                  class="filters absolute transition-all duration-300 ease-out"
+                  type="button"
+                  data-filter="sepia"
+                >
+                  <img
+                    src="/static/images/visuals/filter-placeholder.svg"
+                    class="filter-image w-14 h-14 rounded-full border-2 border-white pointer-events-none"
+                    alt="sepia"
+                  />
+                </button>
+
+                <button
+                  class="filters absolute transition-all duration-300 ease-out"
+                  type="button"
+                  data-filter="vintage"
+                >
+                  <img
+                    src="/static/images/visuals/filter-placeholder.svg"
+                    class="filter-image w-14 h-14 rounded-full border-2 border-white pointer-events-none"
+                    alt="vintage"
+                  />
+                </button>
+
+                <button
+                  class="filters absolute transition-all duration-300 ease-out"
+                  type="button"
+                  data-filter="vivid"
+                >
+                  <img
+                    src="/static/images/visuals/filter-placeholder.svg"
+                    class="filter-image w-14 h-14 rounded-full border-2 border-white pointer-events-none"
+                    alt="vivid"
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Center Column: Video Player Container (900px wide) -->
+          <div id="video-grid" class="mx-auto w-[900px] h-[500px] bg-[#faf2eb] grid grid-cols-1 overflow-hidden rounded-2xl">
+            <!--  Your video component goes here -->
+          </div>
+
+          <!-- Right Column -->
+          <div class="justify-self-start">
+            <!-- Right sidebar content goes here -->
+          </div>
+        </div>
 
         <div
           class="bg-[#faf1ea] animate-grow border border-dashed shadow p-4 py-1 gap-3 text-sm border-[#ff8fad] justify-center items-center rounded-full flex flex-row max-w-67 mx-auto"
@@ -144,5 +233,6 @@
     <script type="module" src="/static/js/session/session-main.js"></script>
     <script type="module" src="/static/js/session/media/camera.js"></script>
     <script type="module" src="/static/js/session/media/video.js"></script>
+    <script type="module" src="/static/js/utils/scroll-container.js" defer></script>
   </body>
 </html>
