@@ -96,4 +96,13 @@
   .option-default {
     @apply bg-white text-black mr-2;
   }
+
+.filters {
+  @apply bg-white p-2 rounded-full border border-black/30 border-dashed overflow-hidden;
+}
+
+.filter-image {
+  @apply w-13 h-13 object-cover rounded-full;
+}
+  
 }
