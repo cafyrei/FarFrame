@@ -1,5 +1,5 @@
 import { getSocket, participantId} from "../utils/socket.js";
-import { setParticipantMirror } from "./media/video.js";
+import { setParticipantMirror, setFilter } from "./media/video.js";
 import { initLocalVideo } from "./media/camera.js";
 import {
   establishRTCOffer,
@@ -59,6 +59,9 @@ if (socket) {
       case "mirror_changed":
         setParticipantMirror(data.participantId, data.mirrored);
         break;
+      case "filter_changed":
+        setFilter(data.filter);
+        break;
     }
 
     // This Establish(starts) the handshake
@@ -72,15 +75,26 @@ if (socket) {
 }
 
 // Session Functions
-
-export function sendMirrorState(isMirrored) {
+export function sendMirrorState(mirrored) {
   if(socket?.readyState !== WebSocket.OPEN) return;
   
   socket.send(
     JSON.stringify({
       type: "mirror_changed",
       participantId,
-      mirrored: isMirrored,
+      mirrored,
+    }),
+  );
+}
+
+export function sendFilterState(filter) {
+  if(socket?.readyState !== WebSocket.OPEN) return;
+
+  socket.send(
+    JSON.stringify({
+      type: "filter_changed",
+      participantId,
+      filter,
     }),
   );
 }
