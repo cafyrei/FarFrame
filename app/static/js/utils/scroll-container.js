@@ -1,5 +1,6 @@
 import { setFilter } from "../session/media/video.js";
 import { sendFilterState } from "../session/session-socket.js";
+import { filterTextLabel } from "../utils/element-utils.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const wrapper = document.getElementById("filter-wrapper");
@@ -46,6 +47,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             setFilter(activeFilter);
             sendFilterState(activeFilter);
+
+            filterTextLabel(activeFilter);
           }
         } else {
           btn.classList.remove("ring-4", "ring-cyan-400");
