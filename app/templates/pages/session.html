@@ -181,12 +181,30 @@
 
           <!-- Center Column: Video Player Container (900px wide) -->
           <div id="video-grid" class="relative w-full aspect-video bg-[#faf2eb] grid grid-cols-1 overflow-hidden rounded-2xl">
-
           </div>
 
           <!-- Right Column -->
           <div class="justify-self-start">
-            <!-- Right sidebar content goes here -->
+            <canvas id="videoCanvas" class="hidden"></canvas>
+            
+            <div class="grid gap-4 mt-1 p-4 w-55 rounded-lg border border-gray-50/10"> 
+              <div class="aspect-video bg-[#ffefe0] rounded-lg border-dashed flex items-center justify-center overflow-hidden border border-[#ff648d]" title="preview">
+                <img id="shot-0" class="w-full h-full object-cover hidden" alt="Shot 1" />
+                <span id="label-0" class="text-[#ff648d] font-bold">1</span>
+              </div>
+              <div class="aspect-video bg-[#ffefe0] rounded-lg border-dashed flex items-center justify-center overflow-hidden border border-[#ff648d]" title="preview">
+                <img id="shot-1" class="w-full h-full object-cover hidden" alt="Shot 2" />
+                <span id="label-1" class="text-[#ff648d] font-bold">2</span>
+              </div>
+              <div class="aspect-video bg-[#ffefe0] rounded-lg border-dashed flex items-center justify-center overflow-hidden border border-[#ff648d]" title="preview">
+                <img id="shot-2" class="w-full h-full object-cover hidden" alt="Shot 3" />
+                <span id="label-2" class="text-[#ff648d] font-bold">3</span>
+              </div>
+              <div class="aspect-video bg-[#ffefe0] rounded-lg border-dashed flex items-center justify-center overflow-hidden border border-[#ff648d]" title="preview">
+                <img id="shot-3" class="w-full h-full object-cover hidden" alt="Shot 4" />
+                <span id="label-3" class="text-[#ff648d] font-bold">4</span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -208,7 +226,7 @@
         >
           <button
             class="primary-btn shadow px-6 flex flex-row gap-2 items-center"
-            id="cameraBtn"
+            id="captureBtn"
           >
             <img
               class="w-5 h-5 invert"
@@ -233,6 +251,7 @@
     <script type="module" src="/static/js/session/session-main.js"></script>
     <script type="module" src="/static/js/session/media/camera.js"></script>
     <script type="module" src="/static/js/session/media/video.js"></script>
+    <script type="module" src="/static/js/utils/capture-img.js"></script>
     <script
       type="module"
       src="/static/js/utils/scroll-container.js"
