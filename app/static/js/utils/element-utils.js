@@ -28,34 +28,3 @@ export function hideElement(elementId) {
     }, 100); // Matches Tailwind duration-300
   }
 }
-
-export function filterTextLabel(label) {
-  const videoGrid = document.getElementById("video-grid");
-  if (!videoGrid) return;
-
-  const existingLabel = document.getElementById("filter-label");
-  if (existingLabel) {
-    existingLabel.remove();
-  }
-
-  const template = document.createElement("div");
-
-  template.innerHTML = `
-    <div id="filter-label" class="absolute inset-0 flex items-center justify-center uppercase text-5xl font-bold text-white p-2 pointer-events-none transition-opacity duration-500 ease-out opacity-100 drop-shadow-lg">
-      ${label}
-    </div>
-  `.trim();
-
-
-  const labelElement = template.firstElementChild;
-  
-  videoGrid.appendChild(labelElement);
-  setTimeout(() => {
-    labelElement.classList.remove("opacity-100");
-    labelElement.classList.add("opacity-0");
-
-    setTimeout(() => {
-      labelElement.remove();
-    }, 500);
-  }, 600);
-}

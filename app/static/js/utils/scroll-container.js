@@ -1,6 +1,6 @@
 import { setFilter } from "../session/media/video.js";
 import { sendFilterState } from "../session/session-socket.js";
-import { filterTextLabel } from "../utils/element-utils.js";
+import { filterTextLabel } from "../utils/filters-utils.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const wrapper = document.getElementById("filter-wrapper");

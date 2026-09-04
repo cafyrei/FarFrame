@@ -80,6 +80,7 @@ if (socket) {
   };
 }
 
+// SESSION EVENT TEMPLATE
 function sendSessionEvent(type, payload = {}) {
   if (socket?.readyState !== WebSocket.OPEN) return;
 
