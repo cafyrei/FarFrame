@@ -1,4 +1,5 @@
 import { getSocket, participantId} from "../utils/socket.js";
+import { startCountdown } from "../utils/capture-img.js";
 import { setParticipantMirror, setFilter } from "./media/video.js";
 import { initLocalVideo } from "./media/camera.js";
 import {
@@ -62,6 +63,9 @@ if (socket) {
       case "filter_changed":
         setFilter(data.filter);
         break;
+      case "capture_sequence":
+        startCountdown();
+        break;
     }
 
     // This Establish(starts) the handshake
@@ -95,6 +99,17 @@ export function sendFilterState(filter) {
       type: "filter_changed",
       participantId,
       filter,
+    }),
+  );
+}
+
+export function initiateCaptureSequence() {
+  if(socket?.readyState !== WebSocket.OPEN) return;
+
+  socket.send(
+    JSON.stringify({
+      type: "capture_sequence",
+      participantId,
     }),
   );
 }

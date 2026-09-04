@@ -1,13 +1,17 @@
+import { initiateCaptureSequence } from "../session/session-socket.js";
+
 const canvas = document.getElementById("videoCanvas");
 const captureBtn = document.getElementById("captureBtn");
 const countdownContainer = document.getElementById("countdown-container");
 const countdownElement = document.getElementById("countdown");
 const pizzaSvg = document.getElementById("countdown-pizza");
 
-const TOTAL_SLICES = 10;
-
+// SLICES ARE USED FOR THE COUNTDOWN VISUALIZATION
+const TOTAL_SLICES = 6;
 let slices = [];
 
+// THIS IS USED TO LIMIT THE NUMBER OF IMAGES CAPTURED
+const TOTAL_SHOTS = 4;
 const previewImages = [
   document.getElementById("shot-0"),
   document.getElementById("shot-1"),
@@ -27,20 +31,49 @@ function captureImage() {
     .getElementById("video-grid")
     .querySelectorAll("video");
 
+  const videoCount = videos.length;
+
   if (videos.length === 0) {
     console.warn("No video elements found in the video grid.");
     return;
   }
 
-  console.log("Video elements found:", videos.length);
-
   const context = canvas.getContext("2d");
 
-  canvas.width = 1100;
-  canvas.height = 600;
+  canvas.width = 1920;
+  canvas.height = 1080;
 
-  context.drawImage(videos[0], 0, 0, canvas.width, canvas.height);
+  const videoWidth = canvas.width / videoCount;
 
+const destinationRatio = videoWidth / canvas.height;
+
+  videos.forEach((video, index) => {
+    const x = index * videoWidth;
+
+    const sourceHeight = video.videoHeight;
+    const sourceWidth = sourceHeight * destinationRatio;
+
+    const sourceX =
+      (video.videoWidth - sourceWidth) / 2;
+
+    const sourceY = 0;
+
+    context.drawImage(
+      video,
+
+      // Crop from source
+      sourceX,
+      sourceY,
+      sourceWidth,
+      sourceHeight,
+
+      // Draw onto canvas
+      x,
+      0,
+      videoWidth,
+      canvas.height
+    );
+  });
   const imageDataUrl = canvas.toDataURL("image/png");
 
   const nextPreview = previewImages.find((img) =>
@@ -126,7 +159,11 @@ function resetPizza() {
 // Countdown
 // ==================================================
 
-function startCountdown() {
+let imageTakenCount = 0;
+
+export function startCountdown() {
+  captureBtn.classList.add("hidden");
+
   let countdownValue = TOTAL_SLICES;
 
   resetPizza();
@@ -150,7 +187,17 @@ function startCountdown() {
 
       countdownContainer.classList.add("hidden");
 
+      imageTakenCount++;
       captureImage();
+
+      if (imageTakenCount < TOTAL_SHOTS) {
+        setTimeout(() => {
+          startCountdown();
+        }, 1500);
+      } else {
+        captureBtn.classList.remove("hidden");
+        imageTakenCount = 0;
+      }
     }
   }, 1000);
 }
@@ -162,7 +209,5 @@ function startCountdown() {
 createPizzaSlices();
 
 captureBtn.addEventListener("click", () => {
-  captureBtn.classList.add("hidden");
-  
-  startCountdown();
+  initiateCaptureSequence();
 });

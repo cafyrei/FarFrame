@@ -12,7 +12,6 @@
     --color-red-300: oklch(80.8% 0.114 19.571);
     --color-red-500: oklch(63.7% 0.237 25.331);
     --color-red-900: oklch(39.6% 0.141 25.723);
-    --color-amber-600: oklch(66.6% 0.179 58.318);
     --color-emerald-900: oklch(37.8% 0.077 168.94);
     --color-cyan-400: oklch(78.9% 0.154 211.53);
     --color-blue-100: oklch(93.2% 0.032 255.585);
@@ -23,7 +22,6 @@
     --color-gray-500: oklch(55.1% 0.027 264.364);
     --color-gray-700: oklch(37.3% 0.034 259.733);
     --color-gray-800: oklch(27.8% 0.033 256.848);
-    --color-gray-900: oklch(21% 0.034 264.665);
     --color-black: #000;
     --color-white: #fff;
     --spacing: 0.25rem;
@@ -343,9 +341,6 @@
   .my-4 {
     margin-block: calc(var(--spacing) * 4);
   }
-  .mt-1 {
-    margin-top: var(--spacing);
-  }
   .mt-4 {
     margin-top: calc(var(--spacing) * 4);
   }
@@ -418,9 +413,6 @@
   .h-23 {
     height: calc(var(--spacing) * 23);
   }
-  .h-28 {
-    height: calc(var(--spacing) * 28);
-  }
   .h-\[280px\] {
     height: 280px;
   }
@@ -468,9 +460,6 @@
   }
   .w-23 {
     width: calc(var(--spacing) * 23);
-  }
-  .w-28 {
-    width: calc(var(--spacing) * 28);
   }
   .w-55 {
     width: calc(var(--spacing) * 55);
@@ -608,6 +597,15 @@
   }
   .grid-cols-\[1fr_minmax\(0\,900px\)_1fr\] {
     grid-template-columns: 1fr minmax(0,900px) 1fr;
+  }
+  .grid-cols-\[1fr_minmax\(0\,960\)_1fr\] {
+    grid-template-columns: 1fr minmax(0,960) 1fr;
+  }
+  .grid-cols-\[1fr_minmax\(0\,960px\)_1fr\] {
+    grid-template-columns: 1fr minmax(0,960px) 1fr;
+  }
+  .grid-cols-\[1fr_minmax\(0\,1920px\)_1fr\] {
+    grid-template-columns: 1fr minmax(0,1920px) 1fr;
   }
   .flex-col {
     flex-direction: column;
@@ -783,12 +781,6 @@
   .bg-\[\#ffe8d3\] {
     background-color: #ffe8d3;
   }
-  .bg-\[\#ffefe0\] {
-    background-color: #ffefe0;
-  }
-  .bg-\[\#fff5ec\] {
-    background-color: #fff5ec;
-  }
   .bg-black {
     background-color: var(--color-black);
   }
@@ -958,10 +950,6 @@
   .font-semibold {
     --tw-font-weight: var(--font-weight-semibold);
     font-weight: var(--font-weight-semibold);
-  }
-  .tracking-wide {
-    --tw-tracking: var(--tracking-wide);
-    letter-spacing: var(--tracking-wide);
   }
   .tracking-wider {
     --tw-tracking: var(--tracking-wider);
