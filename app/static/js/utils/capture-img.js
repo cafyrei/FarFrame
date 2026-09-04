@@ -27,13 +27,19 @@ const previewLabels = [
 ];
 
 function captureImage() {
-  const videos = document
-    .getElementById("video-grid")
-    .querySelectorAll("video");
+  const videos = Array.from(
+    document
+      .getElementById("video-grid")
+      .querySelectorAll("video")
+  );
+
+  videos.sort(
+    (a, b) => Number(a.style.order) - Number(b.style.order)
+  );
 
   const videoCount = videos.length;
 
-  if (videos.length === 0) {
+  if (videoCount === 0) {
     console.warn("No video elements found in the video grid.");
     return;
   }
@@ -44,36 +50,45 @@ function captureImage() {
   canvas.height = 1080;
 
   const videoWidth = canvas.width / videoCount;
-
-const destinationRatio = videoWidth / canvas.height;
+  const destinationRatio = videoWidth / canvas.height;
 
   videos.forEach((video, index) => {
+    const isMirrored = video.style.transform === "scaleX(-1)";
+
+    const vWidth = video.videoWidth || 640;
+    const vHeight = video.videoHeight || 480;
+
+    const sourceHeight = vHeight;
+    const sourceWidth = sourceHeight * destinationRatio;
+    const sourceX = (vWidth - sourceWidth) / 2;
+    const sourceY = 0;
+
     const x = index * videoWidth;
 
-    const sourceHeight = video.videoHeight;
-    const sourceWidth = sourceHeight * destinationRatio;
+    context.save();
 
-    const sourceX =
-      (video.videoWidth - sourceWidth) / 2;
-
-    const sourceY = 0;
+    if (isMirrored) {
+      context.translate(x + videoWidth, 0);
+      context.scale(-1, 1);
+    } else {
+      context.translate(x, 0);
+    }
 
     context.drawImage(
       video,
-
-      // Crop from source
       sourceX,
       sourceY,
       sourceWidth,
       sourceHeight,
-
-      // Draw onto canvas
-      x,
+      0,
       0,
       videoWidth,
-      canvas.height
+      canvas.height,
     );
+
+    context.restore();
   });
+
   const imageDataUrl = canvas.toDataURL("image/png");
 
   const nextPreview = previewImages.find((img) =>
@@ -83,12 +98,14 @@ const destinationRatio = videoWidth / canvas.height;
   if (nextPreview) {
     nextPreview.src = imageDataUrl;
     nextPreview.classList.remove("hidden");
-    previewLabels[previewImages.indexOf(nextPreview)].classList.add("hidden");
+
+    const previewIndex = previewImages.indexOf(nextPreview);
+    if (previewLabels[previewIndex]) {
+      previewLabels[previewIndex].classList.add("hidden");
+    }
   } else {
     console.warn("All preview slots are filled. Cannot display more images.");
   }
-
-  console.log("Image captured and drawn on canvas.");
 }
 
 // ==================================================
