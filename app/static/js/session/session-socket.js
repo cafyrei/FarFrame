@@ -1,5 +1,5 @@
 import { getSocket, participantId} from "../utils/socket.js";
-import { startCountdown } from "../utils/capture-img.js";
+import { startCountdown, resetCaptureSession } from "../utils/capture-img.js";
 import { setParticipantMirror, setFilter } from "./media/video.js";
 import { initLocalVideo } from "./media/camera.js";
 import {
@@ -65,6 +65,8 @@ if (socket) {
         break;
       case "capture_sequence":
         startCountdown();
+      case "reset_capture":
+        resetCaptureSession();
         break;
     }
 
@@ -78,59 +80,30 @@ if (socket) {
   };
 }
 
-// Session Functions
-export function sendMirrorState(mirrored) {
-  if(socket?.readyState !== WebSocket.OPEN) return;
-  
+function sendSessionEvent(type, payload = {}) {
+  if (socket?.readyState !== WebSocket.OPEN) return;
+
   socket.send(
     JSON.stringify({
-      type: "mirror_changed",
+      type,
       participantId,
-      mirrored,
-    }),
+      ...payload,
+    })
   );
+}
+
+export function sendMirrorState(mirrored) {
+  sendSessionEvent("mirror_changed", { mirrored });
 }
 
 export function sendFilterState(filter) {
-  if(socket?.readyState !== WebSocket.OPEN) return;
-
-  socket.send(
-    JSON.stringify({
-      type: "filter_changed",
-      participantId,
-      filter,
-    }),
-  );
+  sendSessionEvent("filter_changed", { filter });
 }
 
 export function initiateCaptureSequence() {
-  if(socket?.readyState !== WebSocket.OPEN) return;
-
-  socket.send(
-    JSON.stringify({
-      type: "capture_sequence",
-      participantId,
-    }),
-  );
+  sendSessionEvent("capture_sequence");
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// TEMPORARY BUTTON FOR DEBUGGING
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-// const testBtn = document.getElementById("testBtn");
-
-// testBtn.addEventListener("click", () => {
-//   if (socket && socket.readyState === WebSocket.OPEN) {
-//     socket.send(
-//       JSON.stringify({
-//         type: "test",
-//         message: "Hello!",
-//       }),
-//     );
-//   }
-// });
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// TO HERE
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+export function resetCaptureSequence() {
+  sendSessionEvent("reset_capture");
+}

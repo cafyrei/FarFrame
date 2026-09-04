@@ -79,7 +79,7 @@ async def websocket_endpoint(websocket: WebSocket, room_code: str, participantId
                     )
                     return
                     
-                case {"type": "start_session"} | {"type": "capture_sequence"}:
+                case {"type": "start_session"} | {"type": "capture_sequence"} | {"type" : "reset_capture"}:
                     await connectionManager.broadcast_to_anyone(data, room_code)
                 case _:
                     await connectionManager.broadcast_to_others(data, room_code, sender=websocket)
