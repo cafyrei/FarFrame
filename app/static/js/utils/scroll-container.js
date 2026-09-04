@@ -47,7 +47,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             setFilter(activeFilter);
             sendFilterState(activeFilter);
-
             filterTextLabel(activeFilter);
           }
         } else {

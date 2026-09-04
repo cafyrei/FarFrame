@@ -62,7 +62,6 @@ export function filterTextLabel(label) {
     </div>
   `.trim();
 
-
   const labelElement = template.firstElementChild;
   
   videoGrid.appendChild(labelElement);

@@ -1,5 +1,6 @@
 import { getSocket, participantId} from "../utils/socket.js";
 import { startCountdown, resetCaptureSession } from "../utils/capture-img.js";
+import { filterTextLabel } from "../utils/filters-utils.js";
 import { setParticipantMirror, setFilter } from "./media/video.js";
 import { initLocalVideo } from "./media/camera.js";
 import {
@@ -62,6 +63,7 @@ if (socket) {
         break;
       case "filter_changed":
         setFilter(data.filter);
+        filterTextLabel(data.filter);
         break;
       case "capture_sequence":
         startCountdown();
