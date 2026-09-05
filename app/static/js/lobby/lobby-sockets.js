@@ -27,7 +27,7 @@ if (socket) {
 
   socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
-    console.log("Data Check:", data); // Data Check
+    // console.log("Data Check:", data); // Data Check
     updateParticipantCount(data.count);
 
     switch (data.type) {

@@ -19,6 +19,8 @@ const peerConnection = new RTCPeerConnection();
  * @param {RTCTrackEvent} event - The track event containing incoming tracks and streams.
  */
 peerConnection.ontrack = (event) => {
+    onsole.log("TRACK RECEIVED:", event.track.kind);
+
     if (event.streams && event.streams[0]) {
       addParticipantVideo(remoteParticipantId, event.streams[0], remoteParticipantPosition);
     } else {
@@ -179,3 +181,25 @@ export function setMicrophoneEnabled(enabled) {
     track.enabled = enabled;
   });
 }
+
+
+peerConnection.onconnectionstatechange = () => {
+  console.log(
+    "Connection state:",
+    peerConnection.connectionState
+  );
+};
+
+peerConnection.oniceconnectionstatechange = () => {
+  console.log(
+    "ICE state:",
+    peerConnection.iceConnectionState
+  );
+};
+
+peerConnection.onicegatheringstatechange = () => {
+  console.log(
+    "ICE gathering:",
+    peerConnection.iceGatheringState
+  );
+};

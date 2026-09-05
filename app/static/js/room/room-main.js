@@ -99,7 +99,7 @@ submit_room_code_button.addEventListener("click", async (event) => {
     currentRoomCode = room.room_code;
     participantId = room.participantId;
 
-    console.log(participantId);
+    // console.log(participantId);
 
     hideElement("join-room-container");
 
