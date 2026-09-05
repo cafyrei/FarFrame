@@ -27,7 +27,7 @@ async function startMedia() {
       },
       audio: true,
     });
-
+    
     return mediaStream;
   } catch (error) {
     console.error("Error accessing media devices:", error);
@@ -42,6 +42,10 @@ async function startMedia() {
 
     return null;
   }
+}
+
+export function getLocalMediaStream() {
+  return mediaStream;
 }
 
 export async function initLocalVideo(myPosition) {
@@ -70,9 +74,7 @@ async function getCameras() {
 async function getVideoCameras() {
   const allDevices = await getCameras();
 
-  return allDevices.filter(
-    (device) => device.kind === "videoinput"
-  );
+  return allDevices.filter((device) => device.kind === "videoinput");
 }
 
 export async function populateCameraList() {
@@ -95,8 +97,7 @@ export async function populateCameraList() {
 
     option.value = camera.deviceId;
     option.className = "option-default";
-    option.textContent =
-      camera.label || `Camera ${index + 1}`;
+    option.textContent = camera.label || `Camera ${index + 1}`;
 
     cameraList.appendChild(option);
   });
@@ -124,8 +125,7 @@ export async function startStream(cameraDeviceId) {
   try {
     const oldStream = videoElement.srcObject;
 
-    const newStream =
-      await navigator.mediaDevices.getUserMedia(constraints);
+    const newStream = await navigator.mediaDevices.getUserMedia(constraints);
 
     const newVideoTrack = newStream.getVideoTracks()[0];
 
@@ -156,7 +156,7 @@ export async function startStream(cameraDeviceId) {
 export async function initializeCamera() {
   if (!navigator.mediaDevices?.enumerateDevices) {
     alert(
-      "This browser does not support camera detection. Please use a modern browser like Chrome, Firefox, or Edge."
+      "This browser does not support camera detection. Please use a modern browser like Chrome, Firefox, or Edge.",
     );
     return;
   }

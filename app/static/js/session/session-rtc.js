@@ -64,6 +64,7 @@ export async function establishRTCOffer(senderPosition) {
     const localStream = await initLocalVideo(senderPosition);
     const tracks = localStream.getTracks();
 
+
     tracks.forEach((track) => {
       peerConnection.addTrack(track, localStream);
     });
@@ -159,4 +160,22 @@ export async function replaceVideoTrack(newTrack) {
 
   await videoSender.replaceTrack(newTrack);
 
+}
+
+export function setMicrophoneEnabled(enabled) {
+  if (!mediaStream) {
+    console.warn("Media stream not available.");
+    return;
+  }
+
+  const audioTracks = mediaStream.getAudioTracks();
+
+  if (audioTracks.length === 0) {
+    console.warn("No microphone track found.");
+    return;
+  }
+
+  audioTracks.forEach((track) => {
+    track.enabled = enabled;
+  });
 }

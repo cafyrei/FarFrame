@@ -6,6 +6,9 @@ import {
   setParticipantMirror
 } from "./media/video.js";
 import {
+  setMicrophoneEnabled
+} from "./media/communication.js";
+import {
   sendMirrorState, 
 } from "./session-socket.js";
 import { participantId } from "../utils/socket.js";
@@ -34,6 +37,8 @@ muteBtn?.addEventListener("click", () => {
 
   // Update inner DOM elements safely
   muteBtn.querySelector("p").textContent = label;
+
+  setMicrophoneEnabled(isMuted);
 
   const iconDiv = muteBtn.querySelector("div");
   iconDiv.style.maskImage = `url('${icon}')`;

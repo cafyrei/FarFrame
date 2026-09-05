@@ -30,7 +30,7 @@ if (socket) {
 
   socket.onmessage = async (event) => {
     const data = JSON.parse(event.data);
-    console.log("Data: ", data); // Data Check
+    // console.log("Data: ", data); // Data Check
 
     switch (data.type) {
       case "participant_joined":
@@ -40,7 +40,7 @@ if (socket) {
 
         if (participantId === data.participantId) {
           myPosition = data.position;
-          await initLocalVideo(myPosition);
+          await initLocalVideo(myPosition); // FOR REMOVAL
         }
         partipantCount = data.count;
 
