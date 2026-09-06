@@ -101,4 +101,8 @@ async def websocket_endpoint(websocket: WebSocket, room_code: str, participantId
         room_code
     )
         
+    except Exception as e:
+        print("WebSocket ERROR:", repr(e))
+        raise
+        
     

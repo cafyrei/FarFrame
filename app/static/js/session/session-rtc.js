@@ -9,25 +9,47 @@ let remoteParticipantId = null;
 let remoteParticipantPosition = null;
 
 // WebRTC stream connetion
-const peerConnection = new RTCPeerConnection();
+const peerConnection = new RTCPeerConnection({
+  iceServers: [
+    { urls: 'stun:stun.l.google.com:19302' },
+    { urls: 'stun:stun.services.mozilla.com:3478' },
+    {
+      urls: "turn:free.expressturn.com:3478",
+      username: "000000002104028403",
+      credential: "lc1gGtju4xF/rB00SUIiIeGOScA="
+    }
+  ]
+});
+
+
+
+console.log("RTC DEBUG CODE LOADED");
 
 /**
  * Event handler triggered when a remote media track (audio/video) is received.
  * Binds the incoming stream to the remote video UI, falling back to creating
  * a new MediaStream if the track is delivered without an associated stream.
- * 
+ *
  * @param {RTCTrackEvent} event - The track event containing incoming tracks and streams.
  */
 peerConnection.ontrack = (event) => {
-    onsole.log("TRACK RECEIVED:", event.track.kind);
+  console.log("TRACK RECEIVED:", event.track.kind);
 
-    if (event.streams && event.streams[0]) {
-      addParticipantVideo(remoteParticipantId, event.streams[0], remoteParticipantPosition);
-    } else {
-      let inBoundStream = new MediaStream();
-      inBoundStream.addTrack(event.track);
-      addParticipantVideo(remoteParticipantId, inBoundStream, remoteParticipantPosition);
-    }
+  if (event.streams && event.streams[0]) {
+    addParticipantVideo(
+      remoteParticipantId,
+      event.streams[0],
+      remoteParticipantPosition,
+    );
+  } else {
+    let inBoundStream = new MediaStream();
+    inBoundStream.addTrack(event.track);
+    addParticipantVideo(
+      remoteParticipantId,
+      inBoundStream,
+      remoteParticipantPosition,
+    );
+  }
 };
 
 /*
@@ -35,6 +57,7 @@ peerConnection.ontrack = (event) => {
  * and transmits them to the remote peer via WebSockets.
  */
 peerConnection.onicecandidate = (event) => {
+  console.log("ICE CANDIDATE EVENT:", event.candidate);
   if (event.candidate) {
     socket.send(
       JSON.stringify({
@@ -50,7 +73,10 @@ peerConnection.onicecandidate = (event) => {
  * @param {RTCIceCandidateInit} candidate - The remote ICE candidate received from the signaling server.
  */
 export async function handleCandidate(candidate) {
-  if (peerConnection.remoteDescription && peerConnection.remoteDescription.type) {
+  if (
+    peerConnection.remoteDescription &&
+    peerConnection.remoteDescription.type
+  ) {
     await peerConnection.addIceCandidate(candidate);
   } else {
     pendingIceCandidates.push(candidate);
@@ -63,26 +89,26 @@ export async function handleCandidate(candidate) {
  * creates an SDP offer, sets it locally, and transmits it via WebSocket.
  */
 export async function establishRTCOffer(senderPosition) {
-    const localStream = await initLocalVideo(senderPosition);
-    const tracks = localStream.getTracks();
+  console.log("ESTABLISHING RTC OFFER");
+  const localStream = await initLocalVideo(senderPosition);
+  const tracks = localStream.getTracks();
 
+  tracks.forEach((track) => {
+    peerConnection.addTrack(track, localStream);
+  });
 
-    tracks.forEach((track) => {
-      peerConnection.addTrack(track, localStream);
-    });
+  // Initiator: Creates an offer
+  const offer = await peerConnection.createOffer();
+  await peerConnection.setLocalDescription(offer);
 
-    // Initiator: Creates an offer
-    const offer = await peerConnection.createOffer();
-    await peerConnection.setLocalDescription(offer);
-
-    socket.send(
-      JSON.stringify({
-        type: "offer",
-        offer: offer,
-        participantId: participantId,
-        position: senderPosition,
-      }),
-    );
+  socket.send(
+    JSON.stringify({
+      type: "offer",
+      offer: offer,
+      participantId: participantId,
+      position: senderPosition,
+    }),
+  );
 }
 
 /**
@@ -92,7 +118,13 @@ export async function establishRTCOffer(senderPosition) {
  *
  * @param {RTCSessionDescriptionInit} offer - The SDP offer received from the caller.
  */
-export async function handleOffer(offer, senderParticipantId, senderPosition, myPosition) {
+export async function handleOffer(
+  offer,
+  senderParticipantId,
+  senderPosition,
+  myPosition,
+) {
+  console.log("OFFER RECEIVED");
   if (peerConnection) {
     const localStream = await initLocalVideo(myPosition);
     const tracks = localStream.getTracks();
@@ -128,7 +160,12 @@ export async function handleOffer(offer, senderParticipantId, senderPosition, my
  *
  * @param {RTCSessionDescriptionInit} answer - The SDP answer received from the remote peer.
  */
-export async function handleAnswer(answer, senderParticipantId, senderPosition) {
+export async function handleAnswer(
+  answer,
+  senderParticipantId,
+  senderPosition,
+) {
+  console.log("ANSWER RECEIVED");
   if (peerConnection) {
     remoteParticipantId = senderParticipantId;
     remoteParticipantPosition = senderPosition;
@@ -161,7 +198,6 @@ export async function replaceVideoTrack(newTrack) {
   }
 
   await videoSender.replaceTrack(newTrack);
-
 }
 
 export function setMicrophoneEnabled(enabled) {
@@ -182,24 +218,14 @@ export function setMicrophoneEnabled(enabled) {
   });
 }
 
-
 peerConnection.onconnectionstatechange = () => {
-  console.log(
-    "Connection state:",
-    peerConnection.connectionState
-  );
+  console.log("Connection state:", peerConnection.connectionState);
 };
 
 peerConnection.oniceconnectionstatechange = () => {
-  console.log(
-    "ICE state:",
-    peerConnection.iceConnectionState
-  );
+  console.log("ICE state:", peerConnection.iceConnectionState);
 };
 
 peerConnection.onicegatheringstatechange = () => {
-  console.log(
-    "ICE gathering:",
-    peerConnection.iceGatheringState
-  );
+  console.log("ICE gathering:", peerConnection.iceGatheringState);
 };
