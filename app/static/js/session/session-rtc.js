@@ -11,11 +11,18 @@ let remoteParticipantPosition = null;
 // WebRTC stream connetion
 const peerConnection = new RTCPeerConnection({
   iceServers: [
+    { urls: 'stun:stun.l.google.com:19302' },
+    { urls: 'stun:stun.services.mozilla.com:3478' },
     {
-      urls: "stun:stun.l.google.com:19302",
-    }, 
-  ],
+      urls: "turn:free.expressturn.com:3478",
+      username: "000000002104028403",
+      credential: "lc1gGtju4xF/rB00SUIiIeGOScA="
+    }
+  ]
 });
+
+
+
 console.log("RTC DEBUG CODE LOADED");
 
 /**
