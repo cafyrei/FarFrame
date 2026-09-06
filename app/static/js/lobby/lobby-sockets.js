@@ -22,7 +22,10 @@ if (socket) {
 
   // Socket Participant Entry Denied (Fabricated Id) or Disconnected
   socket.onclose = (event) => {
-    console.log("left");
+    console.log("Socket closed");
+    console.log("Code:", event.code);
+    console.log("Reason:", event.reason);
+    console.log("Clean:", event.wasClean);
   };
 
   socket.onmessage = (event) => {

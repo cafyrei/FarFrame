@@ -25,7 +25,10 @@ if (socket) {
   };
 
   socket.onclose = (event) => {
-    console.log("Socket closed:", event.code);
+    console.log("Socket closed");
+    console.log("Code:", event.code);
+    console.log("Reason:", event.reason);
+    console.log("Clean:", event.wasClean);
   };
 
   socket.onmessage = async (event) => {
